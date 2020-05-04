@@ -1,6 +1,8 @@
 ﻿using Forum.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace Forum.DataAccess.Data
 {
@@ -11,5 +13,10 @@ namespace Forum.DataAccess.Data
         {
         }
         public DbSet<Category> Categories { get; set; }
+
+        public Task<object> GetListAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

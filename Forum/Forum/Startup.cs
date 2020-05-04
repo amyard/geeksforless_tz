@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Forum.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
+using Forum.DataAccess.Repository.IRepository;
+using Forum.DataAccess.Repository;
 
 namespace Forum
 {
@@ -21,6 +23,9 @@ namespace Forum
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
