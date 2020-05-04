@@ -56,7 +56,7 @@ namespace Forum
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area=Forum}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

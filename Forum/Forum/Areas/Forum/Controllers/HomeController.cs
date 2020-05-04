@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Forum.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Forum")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
