@@ -41,14 +41,19 @@ function loadDataTable() {
         "columns": [
             { "data": "name", "width": "20%" },
             { "data": "email", "width": "20%" },
-            { "data": "imageUrl", "width": "20%" },
+            {
+                "data": "imageUrl",
+                "render": function (data, type, row) {
+                    return '<img src="/' +data+ '" style="height: 80px;"/>'
+                },
+                "width": "20%"
+            },
             { "data": "role", "width": "20%" },
             {
                 "data": {
                     id: "id", lockoutEnd: "lockoutEnd"
                 },
                 "render": function (data) {
-                    console.log(data)
                     var today = new Date().getTime();
                     var lockout = new Date(data.lockoutEnd).getTime();
                     if (lockout > today) {
