@@ -23,6 +23,8 @@ namespace Forum
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
                 {
@@ -33,7 +35,10 @@ namespace Forum
 
                     // generate data must be here
                     await GenerateCategories(context);
-                    await GenerateRolesAsync(services, context);
+                    await GenerateRolesAsync(roleManager, context);
+                    await GenerateAdmin(userManager, context);
+                    await GenerateModerator(userManager, context);
+                    await GenerateUsers(userManager, context);
                 }
                 catch (Exception ex)
                 {
@@ -45,9 +50,72 @@ namespace Forum
             host.Run();
         }
 
-        public static async Task GenerateRolesAsync(IServiceProvider services, ApplicationDbContext context)
+        private static async Task GenerateUsers(UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            var users = new List<ApplicationUser>
+            {
+                new ApplicationUser{UserName = "user01@gmail.com", Email = "user01@gmail.com",
+                                    Name = "testuser_01", ImageUrl = "img_seed/users/user1.png"},
+                new ApplicationUser{UserName = "user02@gmail.com", Email = "user02@gmail.com",
+                                    Name = "testuser_02", ImageUrl = "img_seed/users/user2.jpg"},
+                new ApplicationUser{UserName = "user03@gmail.com", Email = "user03@gmail.com",
+                                    Name = "testuser_03", ImageUrl = "img_seed/users/user3.jpg"},
+                new ApplicationUser{UserName = "user04@gmail.com", Email = "user04@gmail.com",
+                                    Name = "testuser_04", ImageUrl = "img_seed/users/user4.png"},
+                new ApplicationUser{UserName = "user05@gmail.com", Email = "user05@gmail.com",
+                                    Name = "testuser_05", ImageUrl = "img_seed/users/user5.jpeg"},
+                new ApplicationUser{UserName = "user06@gmail.com", Email = "user06@gmail.com",
+                                    Name = "testuser_06", ImageUrl = "img_seed/users/user1.png"},
+                new ApplicationUser{UserName = "user07@gmail.com", Email = "user07@gmail.com",
+                                    Name = "testuser_07", ImageUrl = "img_seed/users/user2.jpg"},
+                new ApplicationUser{UserName = "user08@gmail.com", Email = "user08@gmail.com",
+                                    Name = "testuser_08", ImageUrl = "img_seed/users/user3.jpg"},
+                new ApplicationUser{UserName = "user09@gmail.com", Email = "user09@gmail.com",
+                                    Name = "testuser_09", ImageUrl = "img_seed/users/user4.png"},
+                new ApplicationUser{UserName = "user10@gmail.com", Email = "user10@gmail.com",
+                                    Name = "testuser_10", ImageUrl = "img_seed/users/user5.jpeg"},
+            };
+
+            foreach (ApplicationUser user in users)
+            {
+                var result = await userManager.CreateAsync(user, "Admin123*");
+                await userManager.AddToRoleAsync(user, SD.Role_User);
+            }
+        }
+
+        private static async Task GenerateModerator(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        {
+            var users = new List<ApplicationUser>
+            {
+                new ApplicationUser{UserName = "moderator1@gmail.com", Email = "moderator1@gmail.com",
+                                    Name = "moder1", ImageUrl = "img_seed/users/moder1.jpg"},
+                new ApplicationUser{UserName = "moderator2@gmail.com", Email = "moderator2@gmail.com",
+                                    Name = "moder2", ImageUrl = "img_seed/users/moder1.jpg"},
+            };
+
+            foreach(ApplicationUser user in users)
+            {
+                var result = await userManager.CreateAsync(user, "Admin123*");
+                await userManager.AddToRoleAsync(user, SD.Role_Moderator);
+            }
+        }
+
+        private static async Task GenerateAdmin(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        {
+            var user = new ApplicationUser
+            {
+                UserName = "delme@gmail.com",
+                Email = "delme@gmail.com",
+                Name = "delme",
+                ImageUrl = "img_seed/users/admin.png"
+            };
+
+            var result = await userManager.CreateAsync(user, "Admin123*");
+            await userManager.AddToRoleAsync(user, SD.Role_Admin);
+        }
+
+        public static async Task GenerateRolesAsync(RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
+        {
             if (!await roleManager.RoleExistsAsync(SD.Role_Admin))
                 await roleManager.CreateAsync(new IdentityRole(SD.Role_Admin));
             if (!await roleManager.RoleExistsAsync(SD.Role_Moderator))
