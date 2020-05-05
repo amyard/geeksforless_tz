@@ -8,6 +8,8 @@ using Forum.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Forum.DataAccess.Repository.IRepository;
 using Forum.DataAccess.Repository;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Forum.Utility.Services;
 
 namespace Forum
 {
@@ -37,6 +39,9 @@ namespace Forum
             // override for using Roles
             services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // email send - EmailSender was created in Forum.Utility -> Services
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
