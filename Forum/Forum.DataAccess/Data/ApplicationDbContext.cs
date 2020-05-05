@@ -13,10 +13,6 @@ namespace Forum.DataAccess.Data
         {
         }
         public DbSet<Category> Categories { get; set; }
-
-        public Task<object> GetListAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public DbSet<Post> Posts { get; set; }
     }
 }

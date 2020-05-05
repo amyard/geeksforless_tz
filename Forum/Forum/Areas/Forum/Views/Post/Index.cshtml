@@ -1,10 +1,8 @@
-﻿@model IEnumerable<Forum.Models.Category>
+﻿@model IEnumerable<Forum.Models.Post>
 
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
 
 <table class="table actionAdminTable">
     <thead>
@@ -14,6 +12,15 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Body)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Created)
             </th>
             <th>
                 <a asp-action="AddOrEdit" class="btn btn-outline-success">Create New</a>
@@ -31,14 +38,24 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Body)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageUrl)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
                     <a asp-action="AddOrEdit" asp-route-id="@item.Id" class="btn btn-outline-dark">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">Details</a>
-                    <a class="btn btn-outline-danger" onclick='deleteAction("Category", @item.Id)'>Delete</a>
+                    <a class="btn btn-outline-danger" onclick='deleteAction("Post", @item.Id)'>Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
 
 @section Scripts{
     <script src="~/js/main.js"></script>
