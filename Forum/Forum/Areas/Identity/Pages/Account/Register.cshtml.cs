@@ -90,7 +90,7 @@ namespace Forum.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
 
-            // dropdown for display Roles  -> _roleManager.Roles.Where(u => u.Name != SD.Role_Admin)
+            // dropdown for display Roles  -> _roleManager.Roles.Where(u => u.Name != SD.Role_Admin)  exclude display Rple Admin in dropdown
             Input = new InputModel()
             {
                 RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
@@ -134,9 +134,9 @@ namespace Forum.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(SD.Role_User));
 
                     // save as ADMIN
-                    //await _userManager.AddToRoleAsync(user, SD.Role_Admin);
+                    // await _userManager.AddToRoleAsync(user, SD.Role_Admin);
 
-                    if(user.Role == null)
+                    if (user.Role == null)
                         await _userManager.AddToRoleAsync(user, SD.Role_User);
 
                     // send Email after valid register
