@@ -33,7 +33,7 @@ namespace Forum
 
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
+                options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             
             // override for using Roles
@@ -85,6 +85,8 @@ namespace Forum
                     pattern: "{area=Forum}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            // DbSeed.Initial(app, env);
         }
     }
 }
