@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
@@ -81,11 +82,24 @@ namespace Forum.Areas.Identity.Pages.Account
             [DisplayName("Avatar")]
             public string ImageUrl { get; set; }
             public string Role { get; set; }
+
+            public IEnumerable<SelectListItem> RoleList { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
+
+            // dropdown for display Roles  -> _roleManager.Roles.Where(u => u.Name != SD.Role_Admin)
+            Input = new InputModel()
+            {
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                {
+                    Text = i,
+                    Value = i
+                })
+            };
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
@@ -96,6 +110,7 @@ namespace Forum.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 // var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+
                 // override default user model to our ApplicationUser
                 var user = new ApplicationUser
                 {
@@ -118,8 +133,11 @@ namespace Forum.Areas.Identity.Pages.Account
                     if (!await _roleManager.RoleExistsAsync(SD.Role_User))
                         await _roleManager.CreateAsync(new IdentityRole(SD.Role_User));
 
-                    // all users will be admin
-                    await _userManager.AddToRoleAsync(user, SD.Role_Admin);
+                    // save as ADMIN
+                    //await _userManager.AddToRoleAsync(user, SD.Role_Admin);
+
+                    if(user.Role == null)
+                        await _userManager.AddToRoleAsync(user, SD.Role_User);
 
                     // send Email after valid register
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -133,14 +151,21 @@ namespace Forum.Areas.Identity.Pages.Account
                     //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                     //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
+
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email });
                     }
-                    else
+                    else if (user.Role == null)
                     {
+                        // register from site
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        // Admin register with choosing roles from admin panel
+                        return RedirectToAction("Index", "User", new { Area = "Admin" });
                     }
                 }
                 foreach (var error in result.Errors)

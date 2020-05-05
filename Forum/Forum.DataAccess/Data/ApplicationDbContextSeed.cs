@@ -1,4 +1,6 @@
 ﻿using Forum.Models;
+using Forum.Utility;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,11 @@ namespace Forum.DataAccess.Data
 {
     public class ApplicationDbContextSeed
     {
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public ApplicationDbContextSeed(RoleManager<IdentityRole> roleManager)
+        {
+            _roleManager = roleManager;
+        }
 
         // create custom data if not exists
         public static async Task SeedAsync(ApplicationDbContext context, ILoggerFactory loggerFactory)
@@ -27,6 +34,14 @@ namespace Forum.DataAccess.Data
                     }
                     await context.SaveChangesAsync();
                 }
+
+                // create roles, if not exists
+                //if (await _roleManager.RoleExistsAsync(SD.Role_Admin))
+                //    await _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin));
+                //if (!await _roleManager.RoleExistsAsync(SD.Role_Moderator))
+                //    await _roleManager.CreateAsync(new IdentityRole(SD.Role_Moderator));
+                //if (!await _roleManager.RoleExistsAsync(SD.Role_User))
+                //    await _roleManager.CreateAsync(new IdentityRole(SD.Role_User));
             }
             catch (Exception ex)
             {
