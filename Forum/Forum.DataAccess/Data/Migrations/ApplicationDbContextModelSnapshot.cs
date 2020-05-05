@@ -39,6 +39,7 @@ namespace Forum.DataAccess.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Body")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
@@ -47,8 +48,13 @@ namespace Forum.DataAccess.Data.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Title")
+                    b.Property<DateTime>("Modified")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 

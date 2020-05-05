@@ -80,3 +80,6 @@ db.lock
 
 appsettings.json
 *.db
+images
+images/
+images/*

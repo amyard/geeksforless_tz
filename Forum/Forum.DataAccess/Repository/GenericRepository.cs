@@ -3,6 +3,7 @@ using Forum.DataAccess.Repository.IRepository;
 using Forum.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Forum.DataAccess.Repository
@@ -31,7 +32,7 @@ namespace Forum.DataAccess.Repository
 
         public async Task<IReadOnlyList<T>> GetListAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>().OrderByDescending(q => q.Id).ToListAsync();
         }
 
         public async Task CreateAsync(T entity)

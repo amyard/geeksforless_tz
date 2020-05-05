@@ -23,7 +23,11 @@ namespace Forum
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // repository general
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+
+            // save images
+            services.AddTransient<IFileManager, FileManager>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

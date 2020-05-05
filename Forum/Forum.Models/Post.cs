@@ -13,9 +13,10 @@ namespace Forum.Models
         [Required(ErrorMessage = "This field is required.")]
         public string Body { get; set; }
 
-        [Required(ErrorMessage = "This field is required.")]
+        [DisplayName("Image")]
         public string ImageUrl { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Modified { get; set; }
 
         // author , category
     }

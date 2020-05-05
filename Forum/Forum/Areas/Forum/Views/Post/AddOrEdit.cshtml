@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="AddOrEdit">
+        <form asp-action="AddOrEdit"  enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -25,12 +25,19 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
+                <input type="file" name="files" id="uploadBox" multiple class="form-conrtol" />
                 <span asp-validation-for="ImageUrl" class="text-danger"></span>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <input type="submit" value="Submit" class="btn btn-primary btn-block" />
+                    @if (Model.Id != 0)
+                    {
+                        <input type="submit" value="Submit" class="btn btn-primary btn-block" />
+                    }
+                    else
+                    {
+                        <button type="submit" onclick="return validateInput()" class="btn btn-primary btn-block">Create</button>
+                    }
                 </div>
                 <div class="form-group col-md-6">
                     <a asp-action="Index" class="btn btn-secondary btn-block"><i class="fade fa-table mr-2"></i>Back to List</a>
@@ -42,4 +49,14 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function validateInput() {
+            if (document.getElementById('uploadBox').value == "") {
+                swal('Error', 'Please, select an image', 'error')
+                return false;
+            }
+            return true;
+        }
+    </script>
 }
