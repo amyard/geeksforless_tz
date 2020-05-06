@@ -1,4 +1,10 @@
-﻿@model IEnumerable<Forum.Models.Post>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> userManager
+
+@using Forum.DataAccess.Data;
+@inject ApplicationDbContext db;
+
+@model IEnumerable<Forum.Models.Post>
 
 @{
     ViewData["Title"] = "Index";
@@ -20,6 +26,9 @@
                 @Html.DisplayNameFor(model => model.ImageUrl)
             </th>
             <th>
+                Author
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Created)
             </th>
             <th>
@@ -33,34 +42,37 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td id="actionAdminTable-th-id_@item.Id">
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Body)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @if (item.Modified.ToString() != "1/1/0001 12:00:00 AM")
-                {
-                    @Html.DisplayFor(modelItem => item.Modified)
-                }
-            </td>
-            <td>
-                <a asp-action="AddOrEdit" asp-route-id="@item.Id" class="btn btn-outline-dark">Edit</a>
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">Details</a>
-                <a class="btn btn-outline-danger" onclick='deleteAction("Post", @item.Id)'>Delete</a>
-            </td>
-        </tr>
+            <tr>
+                <td id="actionAdminTable-th-id_@item.Id">
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Body)
+                </td>
+                <td>
+                    <img src="@item.ImageUrl" style="height: 80px;" />
+                </td>
+                <td>
+                    @db.ApplicationUsers.Find(item.ApplicationUserId).Name (@db.ApplicationUsers.Find(item.ApplicationUserId).UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
+                    @if (item.Modified.ToString() != "1/1/0001 12:00:00 AM")
+                    {
+                        @Html.DisplayFor(modelItem => item.Modified)
+                    }
+                </td>
+                <td>
+                    <a asp-action="AddOrEdit" asp-route-id="@item.Id" class="btn btn-outline-dark">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">Details</a>
+                    <a class="btn btn-outline-danger" onclick='deleteAction("Post", @item.Id)'>Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

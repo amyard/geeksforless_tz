@@ -1,5 +1,6 @@
 ﻿using Forum.DataAccess.Data;
 using Forum.DataAccess.Repository.IRepository;
+using Forum.DataAccess.Specification;
 using Forum.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -52,6 +53,20 @@ namespace Forum.DataAccess.Repository
                 return true;
             }
             return false;
+        }
+
+        public async Task<T> GetByIdAsyncWithSpec(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).FirstOrDefaultAsync();
+        }
+
+        public async Task<IReadOnlyList<T>> GetListAsyncWithSpec(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).ToListAsync();
+        }
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
         }
     }
 }

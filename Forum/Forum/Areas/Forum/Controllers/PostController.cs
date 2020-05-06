@@ -5,6 +5,8 @@ using Forum.DataAccess.Repository.IRepository;
 using Forum.Utility;
 using Forum.DataAccess.Data;
 using System;
+using System.Security.Claims;
+using Forum.DataAccess.Specification;
 
 namespace Forum.Areas.Forum.Controllers
 {
@@ -27,16 +29,20 @@ namespace Forum.Areas.Forum.Controllers
         // GET: Forum/Post
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GetListAsync());
+            // using Specification
+            var spec = new PostWithSpecification();
+            return View(await _context.GetByIdAsyncWithSpec(spec));
         }
 
         // GET: Forum/Post/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var posts = await _context.GetByIdAsync(id);
-            if (posts == null)
+            // using Specification
+            var spec = new PostWithSpecification(id);
+            var post = await _context.GetByIdAsyncWithSpec(spec);
+            if (post == null)
                 return NotFound();
-            return View(posts);
+            return View(post);
         }
 
         // GET: Forum/Post/Create
@@ -79,7 +85,14 @@ namespace Forum.Areas.Forum.Controllers
 
                 // get error if use   _context.Update(appartment);
                 if (post.Id == 0)
+                {
+                    // get logged user
+                    var claimsIdentity = (ClaimsIdentity)User.Identity;
+                    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+                    post.ApplicationUserId = claim.Value;
                     await _context.CreateAsync(post);
+                }
                 else
                 {
                     var objFromDb = await _context.GetByIdAsync(post.Id);

@@ -19,6 +19,12 @@ namespace Forum.Models
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime Modified { get; set; }
 
-        // author , category
+
+        [Key]
+        [ForeignKey("ApplicationUser")]
+        public string ApplicationUserId { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
+
+        // category
     }
 }

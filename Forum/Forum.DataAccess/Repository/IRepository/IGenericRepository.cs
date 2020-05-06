@@ -1,4 +1,5 @@
-﻿using Forum.Models;
+﻿using Forum.DataAccess.Specification;
+using Forum.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,5 +14,10 @@ namespace Forum.DataAccess.Repository.IRepository
         void UpdateAsync(T entity);
         Task<T> DeleteJsAsync(int id);
         Task<bool> SaveChangesAsync();
+
+
+        // repo with specification
+        Task<T> GetByIdAsyncWithSpec(ISpecification<T> spec);
+        Task<IReadOnlyList<T>> GetListAsyncWithSpec(ISpecification<T> spec);
     }
 }
