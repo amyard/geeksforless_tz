@@ -64,7 +64,8 @@ namespace Forum.Areas.Forum.Controllers
             if (id == 0)
                 return View(postVM);
             else
-                return View(await _context.GetByIdAsync(id));
+                postVM.Post = await _context.GetByIdAsync(id);
+                return View(postVM);
         }
 
         // POST: Forum/Post/Create
@@ -113,6 +114,7 @@ namespace Forum.Areas.Forum.Controllers
                     {
                         objFromDb.Title = postVM.Post.Title;
                         objFromDb.Body = postVM.Post.Body;
+                        objFromDb.CategoryId = postVM.Post.CategoryId;
                         objFromDb.ImageUrl = postVM.Post.ImageUrl;
                         objFromDb.Modified = DateTime.Now;
                     }
