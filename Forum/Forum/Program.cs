@@ -55,25 +55,35 @@ namespace Forum
             var users = new List<ApplicationUser>
             {
                 new ApplicationUser{UserName = "user01@gmail.com", Email = "user01@gmail.com",
-                                    Name = "testuser_01", ImageUrl = "img_seed/users/user1.png"},
+                                    FirstName = "Aval", LastName = "Symo", 
+                                    ImageUrl = "img_seed/users/user1.png"},
                 new ApplicationUser{UserName = "user02@gmail.com", Email = "user02@gmail.com",
-                                    Name = "testuser_02", ImageUrl = "img_seed/users/user2.jpg"},
+                                    FirstName = "Nitro", LastName = "Agin", 
+                                    ImageUrl = "img_seed/users/user2.jpg"},
                 new ApplicationUser{UserName = "user03@gmail.com", Email = "user03@gmail.com",
-                                    Name = "testuser_03", ImageUrl = "img_seed/users/user3.jpg"},
+                                    FirstName = "Trio", LastName = "Lamo", 
+                                    ImageUrl = "img_seed/users/user3.jpg"},
                 new ApplicationUser{UserName = "user04@gmail.com", Email = "user04@gmail.com",
-                                    Name = "testuser_04", ImageUrl = "img_seed/users/user4.png"},
+                                    FirstName = "Anim", LastName = "Tiitri", 
+                                    ImageUrl = "img_seed/users/user4.png"},
                 new ApplicationUser{UserName = "user05@gmail.com", Email = "user05@gmail.com",
-                                    Name = "testuser_05", ImageUrl = "img_seed/users/user5.jpeg"},
+                                    FirstName = "Lilo", LastName = "Stitch",
+                                    ImageUrl = "img_seed/users/user5.jpeg"},
                 new ApplicationUser{UserName = "user06@gmail.com", Email = "user06@gmail.com",
-                                    Name = "testuser_06", ImageUrl = "img_seed/users/user1.png"},
+                                    FirstName = "Alice", LastName = "Wonderland",
+                                    ImageUrl = "img_seed/users/user1.png"},
                 new ApplicationUser{UserName = "user07@gmail.com", Email = "user07@gmail.com",
-                                    Name = "testuser_07", ImageUrl = "img_seed/users/user2.jpg"},
+                                    FirstName = "TC", LastName = "Junior", 
+                                    ImageUrl = "img_seed/users/user2.jpg"},
                 new ApplicationUser{UserName = "user08@gmail.com", Email = "user08@gmail.com",
-                                    Name = "testuser_08", ImageUrl = "img_seed/users/user3.jpg"},
+                                    FirstName = "Argo", LastName = "Symo", 
+                                    ImageUrl = "img_seed/users/user3.jpg"},
                 new ApplicationUser{UserName = "user09@gmail.com", Email = "user09@gmail.com",
-                                    Name = "testuser_09", ImageUrl = "img_seed/users/user4.png"},
+                                    FirstName = "Arkham", LastName = "Boggie", 
+                                    ImageUrl = "img_seed/users/user4.png"},
                 new ApplicationUser{UserName = "user10@gmail.com", Email = "user10@gmail.com",
-                                    Name = "testuser_10", ImageUrl = "img_seed/users/user5.jpeg"},
+                                    FirstName = "Lifro", LastName = "Alivo",
+                                    ImageUrl = "img_seed/users/user5.jpeg"},
             };
 
             foreach (ApplicationUser user in users)
@@ -88,9 +98,11 @@ namespace Forum
             var users = new List<ApplicationUser>
             {
                 new ApplicationUser{UserName = "moderator1@gmail.com", Email = "moderator1@gmail.com",
-                                    Name = "moder1", ImageUrl = "img_seed/users/moder1.jpg"},
+                                    FirstName = "Avalin", LastName = "ASymo",
+                                    ImageUrl = "img_seed/users/moder1.jpg"},
                 new ApplicationUser{UserName = "moderator2@gmail.com", Email = "moderator2@gmail.com",
-                                    Name = "moder2", ImageUrl = "img_seed/users/moder1.jpg"},
+                                    FirstName = "Aval", LastName = "Symo",
+                                    ImageUrl = "img_seed/users/moder1.jpg"},
             };
 
             foreach(ApplicationUser user in users)
@@ -106,7 +118,8 @@ namespace Forum
             {
                 UserName = "delme@gmail.com",
                 Email = "delme@gmail.com",
-                Name = "delme",
+                FirstName = "delme",
+                LastName = "Awesome",
                 ImageUrl = "img_seed/users/admin.png"
             };
 

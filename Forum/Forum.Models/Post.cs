@@ -16,6 +16,9 @@ namespace Forum.Models
 
         [DisplayName("Image")]
         public string ImageUrl { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm}", ApplyFormatInEditMode = true)]
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime Modified { get; set; }
 

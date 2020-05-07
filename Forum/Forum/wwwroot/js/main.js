@@ -39,7 +39,7 @@ function loadDataTable() {
             "url": "/Admin/User/GetAll"
         },
         "columns": [
-            { "data": "name", "width": "20%" },
+            { "data": "fullName", "width": "20%" },
             { "data": "email", "width": "20%" },
             {
                 "data": "imageUrl",
@@ -57,7 +57,7 @@ function loadDataTable() {
                     var today = new Date().getTime();
                     var lockout = new Date(data.lockoutEnd).getTime();
                     if (lockout > today) {
-                        // user is curreckly locked
+                        // user is currently locked
                         return `
                         <div class="text-center">
                             <a onclick=LockUnlock('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width: 100%;">

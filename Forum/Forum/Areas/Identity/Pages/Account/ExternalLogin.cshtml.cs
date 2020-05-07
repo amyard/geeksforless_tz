@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Forum.Models;
+using Forum.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -51,6 +54,26 @@ namespace Forum.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            // custom added additional data
+            [Required]
+            [StringLength(50, ErrorMessage = "{0} cannot be longer than {1} characters.")]
+            public string FirstName { get; set; }
+            [Required]
+            [StringLength(50, ErrorMessage = "{0} cannot be longer than {1} characters.")]
+            public string LastName { get; set; }
+
+            [Display(Name = "Full Name")]
+            public string FullName
+            {
+                get
+                {
+                    return LastName + " " + FirstName;
+                }
+            }
+            [DisplayName("Avatar")]
+            public string ImageUrl { get; set; }
+            public string Role { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -121,10 +144,21 @@ namespace Forum.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                // var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+
+                // override default user model to our ApplicationUser
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName
+                };
+
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, SD.Role_User);
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {

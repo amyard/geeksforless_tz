@@ -10,6 +10,13 @@ using Forum.DataAccess.Repository.IRepository;
 using Forum.DataAccess.Repository;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Forum.Utility.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 
 namespace Forum
 {
@@ -54,6 +61,15 @@ namespace Forum
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
 
+            // facebook and google authentication
+            services.AddAuthentication().AddFacebook(options => {
+                options.AppId = Configuration.GetValue<string>("OAuth:Facebook:Id");
+                options.AppSecret = Configuration.GetValue<string>("OAuth:Facebook:Secret");
+            });
+            services.AddAuthentication().AddGoogle(options => {
+                options.ClientId = Configuration.GetValue<string>("OAuth:Google:Id");
+                options.ClientSecret = Configuration.GetValue<string>("OAuth:Google:Secret");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
