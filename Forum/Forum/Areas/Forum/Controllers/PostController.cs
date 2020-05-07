@@ -73,7 +73,7 @@ namespace Forum.Areas.Forum.Controllers
         // POST: Forum/Post/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit(Post post)
+        public async Task<IActionResult> AddOrEdit(PostVM postVM)
         {
             if (ModelState.IsValid)
             {
@@ -82,48 +82,48 @@ namespace Forum.Areas.Forum.Controllers
                 if (files.Count > 0)
                 {
                     // DELETE OLD IMAGE
-                    if (post.Id != 0)
+                    if (postVM.Post.Id != 0)
                     {
-                        Post obj = await _context.GetByIdAsync(post.Id);
+                        Post obj = await _context.GetByIdAsync(postVM.Post.Id);
                         _fileManager.RemoveImage(obj.ImageUrl);
                     }
-                    post.ImageUrl = await _fileManager.SaveImage(files, SD.Post_Image_Base_Path, SD.Post_Image_Result_Path);
+                    postVM.Post.ImageUrl = await _fileManager.SaveImage(files, SD.Post_Image_Base_Path, SD.Post_Image_Result_Path);
                 }
                 else
                 {
                     // update when they do not change the image
-                    if (post.Id != 0)
+                    if (postVM.Post.Id != 0)
                     {
-                        Post objFromDb = await _context.GetByIdAsync(post.Id);
-                        post.ImageUrl = objFromDb.ImageUrl;
+                        Post objFromDb = await _context.GetByIdAsync(postVM.Post.Id);
+                        postVM.Post.ImageUrl = objFromDb.ImageUrl;
                     }
                 }
 
                 // get error if use   _context.Update(appartment);
-                if (post.Id == 0)
+                if (postVM.Post.Id == 0)
                 {
                     // get logged user
                     var claimsIdentity = (ClaimsIdentity)User.Identity;
                     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-                    post.ApplicationUserId = claim.Value;
-                    await _context.CreateAsync(post);
+                    postVM.Post.ApplicationUserId = claim.Value;
+                    await _context.CreateAsync(postVM.Post);
                 }
                 else
                 {
-                    var objFromDb = await _context.GetByIdAsync(post.Id);
+                    var objFromDb = await _context.GetByIdAsync(postVM.Post.Id);
                     if (objFromDb != null)
                     {
-                        objFromDb.Title = post.Title;
-                        objFromDb.Body = post.Body;
-                        objFromDb.ImageUrl = post.ImageUrl;
+                        objFromDb.Title = postVM.Post.Title;
+                        objFromDb.Body = postVM.Post.Body;
+                        objFromDb.ImageUrl = postVM.Post.ImageUrl;
                         objFromDb.Modified = DateTime.Now;
                     }
                 }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(post);
+            return View(postVM.Post);
         }
 
         // GET: Admin/RentTerm/Delete/5
