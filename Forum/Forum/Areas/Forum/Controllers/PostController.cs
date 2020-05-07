@@ -144,7 +144,8 @@ namespace Forum.Areas.Forum.Controllers
             {
                 return Json(new { success = false, message = "Error while deleting" });
             }
-
+             
+            _fileManager.RemoveImage(post.ImageUrl);
             await _context.DeleteJsAsync(id);
             return Json(new { success = true, message = "Delete Successful" });
         }
