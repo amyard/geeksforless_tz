@@ -18,16 +18,13 @@ namespace Forum.Areas.Forum.Controllers
     {
         private readonly ApplicationDbContext _db;                   // override to repo
         private readonly IGenericRepository<Post> _context;
-        private readonly IGenericRepository<Category> _category;
         private readonly IFileManager _fileManager;                  // for upload images on server
 
         public PostController(IGenericRepository<Post> context,
-            IGenericRepository<Category> category,
             IFileManager fileManager,
             ApplicationDbContext db)
         {
             _context = context;
-            _category = category;
             _fileManager = fileManager;
             _db = db;
         }
@@ -126,7 +123,7 @@ namespace Forum.Areas.Forum.Controllers
             return View(postVM.Post);
         }
 
-        // GET: Admin/RentTerm/Delete/5
+        // GET: Forum/Post/Delete/5
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {

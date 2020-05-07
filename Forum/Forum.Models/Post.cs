@@ -20,10 +20,10 @@ namespace Forum.Models
         public DateTime Modified { get; set; }
 
 
-        [Key]
-        [ForeignKey("ApplicationUser")]
+        
         public string ApplicationUserId { get; set; }
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        [ForeignKey("ApplicationUserId")]
+        public ApplicationUser ApplicationUser { get; set; }
 
         [Required]
         public int CategoryId { get; set; }
