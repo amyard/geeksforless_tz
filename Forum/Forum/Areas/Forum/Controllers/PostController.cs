@@ -10,6 +10,9 @@ using Forum.DataAccess.Specification;
 using Forum.Models.ViewModels;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using Forum.Utility.Services;
+
 
 namespace Forum.Areas.Forum.Controllers
 {
@@ -49,8 +52,10 @@ namespace Forum.Areas.Forum.Controllers
         }
 
         // GET: Forum/Post/Create
+        [Authorize()]
         public async Task<IActionResult> AddOrEdit(int id = 0)
         {
+            //var ids = GetUserInfo();
             PostVM postVM = new PostVM()
             {
                 Post = new Post(),
@@ -65,7 +70,12 @@ namespace Forum.Areas.Forum.Controllers
                 return View(postVM);
             else
                 postVM.Post = await _context.GetByIdAsync(id);
-                return View(postVM);
+
+                // access to edit have admin, moderator and post author
+                bool result = AccessRights.AuthorAdminAccessRight(HttpContext, postVM, _db);
+                if (result)
+                    return View(postVM);
+                return new RedirectResult("~/Identity/Account/AccessDenied");
         }
 
         // POST: Forum/Post/Create

@@ -8,7 +8,7 @@ namespace Forum.Models
     public class Post : BaseEntity
     {
         [Required(ErrorMessage = "This field is required.")]
-        [MaxLength(255)]
+        [StringLength(450, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 20)]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "This field is required.")]

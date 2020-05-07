@@ -174,7 +174,7 @@ namespace Forum.DataAccess.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(maxLength: 255, nullable: false),
+                    Title = table.Column<string>(maxLength: 80, nullable: false),
                     Body = table.Column<string>(nullable: false),
                     ImageUrl = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),

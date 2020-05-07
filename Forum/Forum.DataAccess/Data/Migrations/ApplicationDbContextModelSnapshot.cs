@@ -64,8 +64,8 @@ namespace Forum.DataAccess.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(80)")
+                        .HasMaxLength(80);
 
                     b.HasKey("Id");
 

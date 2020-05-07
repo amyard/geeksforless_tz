@@ -23,7 +23,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Forum.Models\Forum.Models.csproj" />
-    <ProjectReference Include="..\Forum.Utility\Forum.Utility.csproj" />
   </ItemGroup>
 
 </Project>

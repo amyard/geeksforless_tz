@@ -1,14 +1,14 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Forum.DataAccess.Data;
 using Forum.Models;
 using Forum.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
+using Forum.Utility;
 
 namespace Forum.Areas.Forum.Controllers
 {
     [Area("Forum")]
+    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Moderator)]
     public class CategoryController : Controller
     {
         private readonly IGenericRepository<Category> _context;

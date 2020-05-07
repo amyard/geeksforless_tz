@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Forum.DataAccess.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200507093147_InitDb")]
+    [Migration("20200507114708_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,8 +66,8 @@ namespace Forum.DataAccess.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(80)")
+                        .HasMaxLength(80);
 
                     b.HasKey("Id");
 
