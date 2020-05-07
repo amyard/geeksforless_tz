@@ -15,15 +15,15 @@
             <input type="hidden" asp-for="Post.Id" />
             <div class="form-group">
                 <label asp-for="Post.Title" class="control-label"></label>
-                <input asp-for="Post.Title" class="form-control" />
+                <textarea asp-for="Post.Title" class="form-control" id="editor"></textarea>
                 <span asp-validation-for="Post.Title" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Post.CategoryId" class="control-label"></label>
-                @Html.DropDownListFor(m => m.Post.CategoryId, 
-                                    Model.CategoryList, 
-                                    "---Select a Category---", 
+                @Html.DropDownListFor(m => m.Post.CategoryId,
+                                    Model.CategoryList,
+                                    "---Select a Category---",
                                     new { @class = "form-control" })
                 <span asp-validation-for="Post.CategoryId" class="text-danger"></span>
             </div>
@@ -59,6 +59,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/trumbowyg.min.js"></script>
 
     <script>
         function validateInput() {
@@ -68,5 +69,8 @@
             }
             return true;
         }
+
+        // for editor
+        $("#editor").trumbowyg();
     </script>
 }
