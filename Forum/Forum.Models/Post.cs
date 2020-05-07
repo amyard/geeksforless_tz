@@ -25,6 +25,8 @@ namespace Forum.Models
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
 
-        // category
+        [Required]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

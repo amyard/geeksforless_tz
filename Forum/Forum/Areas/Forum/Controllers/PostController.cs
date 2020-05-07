@@ -7,6 +7,9 @@ using Forum.DataAccess.Data;
 using System;
 using System.Security.Claims;
 using Forum.DataAccess.Specification;
+using Forum.Models.ViewModels;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Forum.Areas.Forum.Controllers
 {
@@ -15,13 +18,16 @@ namespace Forum.Areas.Forum.Controllers
     {
         private readonly ApplicationDbContext _db;                   // override to repo
         private readonly IGenericRepository<Post> _context;
+        private readonly IGenericRepository<Category> _category;
         private readonly IFileManager _fileManager;                  // for upload images on server
 
         public PostController(IGenericRepository<Post> context,
+            IGenericRepository<Category> category,
             IFileManager fileManager,
             ApplicationDbContext db)
         {
             _context = context;
+            _category = category;
             _fileManager = fileManager;
             _db = db;
         }
@@ -31,7 +37,7 @@ namespace Forum.Areas.Forum.Controllers
         {
             // using Specification
             var spec = new PostWithSpecification();
-            return View(await _context.GetByIdAsyncWithSpec(spec));
+            return View(await _context.GetListAsyncWithSpec(spec));
         }
 
         // GET: Forum/Post/Details/5
@@ -48,8 +54,18 @@ namespace Forum.Areas.Forum.Controllers
         // GET: Forum/Post/Create
         public async Task<IActionResult> AddOrEdit(int id = 0)
         {
+            PostVM postVM = new PostVM()
+            {
+                Post = new Post(),
+                CategoryList = _db.Categories.ToList().Select(i => new SelectListItem
+                {
+                    Text = i.Title,
+                    Value = i.Id.ToString()
+                })
+            };
+
             if (id == 0)
-                return View(new Post());
+                return View(postVM);
             else
                 return View(await _context.GetByIdAsync(id));
         }
@@ -57,7 +73,7 @@ namespace Forum.Areas.Forum.Controllers
         // POST: Forum/Post/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit([Bind("Title,Body,ImageUrl,Created,Modified,Id")] Post post)
+        public async Task<IActionResult> AddOrEdit(Post post)
         {
             if (ModelState.IsValid)
             {

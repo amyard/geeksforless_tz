@@ -8,14 +8,14 @@ namespace Forum.DataAccess.Specification
         public PostWithSpecification()
         {
             AddInclude(x => x.ApplicationUser);
-            //AddInclude(x => x.Category);
+            AddInclude(x => x.Category);
         }
 
         // for detail view
         public PostWithSpecification(int id) : base(x => x.Id == id)
         {
             AddInclude(x => x.ApplicationUser);
-            //AddInclude(x => x.Category);
+            AddInclude(x => x.Category);
         }
     }
 }
