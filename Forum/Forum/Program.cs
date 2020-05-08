@@ -60,20 +60,23 @@ namespace Forum
 
         private async static Task GeneratePosts(ApplicationDbContext context)
         {
-            var brandsData = File.ReadAllText("../Forum.DataAccess/SeedData/posts_clean.json");
-            var brands = JsonSerializer.Deserialize<List<Post>>(brandsData);
+            if (!context.Posts.Any())
+            { 
+                var brandsData = File.ReadAllText("../Forum.DataAccess/SeedData/posts_clean.json");
+                var brands = JsonSerializer.Deserialize<List<Post>>(brandsData);
 
-            foreach (var item in brands)
-            {
-                Post obj = new Post()
+                foreach (var item in brands)
                 {
-                    Title = item.Title,
-                    Body = item.Body,
-                    CategoryId = item.CategoryId,
-                    ImageUrl = item.ImageUrl,
-                    ApplicationUserId = context.ApplicationUsers.OrderBy(c => Guid.NewGuid()).FirstOrDefault().Id
-                };
-                await context.Posts.AddAsync(obj);
+                    Post obj = new Post()
+                    {
+                        Title = item.Title,
+                        Body = item.Body,
+                        CategoryId = item.CategoryId,
+                        ImageUrl = item.ImageUrl,
+                        ApplicationUserId = context.ApplicationUsers.OrderBy(c => Guid.NewGuid()).FirstOrDefault().Id
+                    };
+                    await context.Posts.AddAsync(obj);
+                }
             }
         }
 
