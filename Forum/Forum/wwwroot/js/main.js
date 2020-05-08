@@ -31,7 +31,9 @@ var dataTable;
 
 $(document).ready(function () {
     loadDataTable();
+    testData();
 });
+
 
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
