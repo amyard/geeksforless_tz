@@ -32,19 +32,19 @@ namespace Forum
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
 
-                    //// add migrations if db does not exists
-                    //context.Database.EnsureCreated();
+                    // add migrations if db does not exists
+                    context.Database.EnsureCreated();
 
-                    //// generate data must be here
-                    //await GenerateCategories(context);
-                    //await GenerateRolesAsync(roleManager, context);
-                    //await GenerateAdmin(userManager, context);
-                    //await GenerateModerator(userManager, context);
-                    //await GenerateUsers(userManager, context);
-                    //await context.SaveChangesAsync();
+                    // generate data must be here
+                    await GenerateCategories(context);
+                    await GenerateRolesAsync(roleManager, context);
+                    await GenerateAdmin(userManager, context);
+                    await GenerateModerator(userManager, context);
+                    await GenerateUsers(userManager, context);
+                    await context.SaveChangesAsync();
 
                     // save data
-                    var brandsData = File.ReadAllText("../Forum.DataAccess/SeedData/ttt.json");
+                    var brandsData = File.ReadAllText("../Forum.DataAccess/SeedData/posts_clean.json");
                     var brands = JsonSerializer.Deserialize<List<Post>>(brandsData);
                     
                     foreach (var item in brands)

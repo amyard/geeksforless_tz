@@ -24,5 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Forum.Models\Forum.Models.csproj" />
   </ItemGroup>
+  
+  <ProjectExtensions><VisualStudio><UserProperties seeddata_41_1json__JsonSchema="http://json.schemastore.org/bootstraprc" /></VisualStudio></ProjectExtensions>
 
 </Project>
