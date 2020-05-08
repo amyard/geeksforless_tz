@@ -44,22 +44,7 @@ namespace Forum
                     await context.SaveChangesAsync();
 
                     // save data
-                    var brandsData = File.ReadAllText("../Forum.DataAccess/SeedData/posts_clean.json");
-                    var brands = JsonSerializer.Deserialize<List<Post>>(brandsData);
-                    
-                    foreach (var item in brands)
-                    {
-                        Post obj = new Post()
-                        {
-                            Title = item.Title,
-                            Body = item.Body,
-                            CategoryId = item.CategoryId,
-                            ImageUrl = item.ImageUrl,
-                            ApplicationUserId = context.ApplicationUsers.FirstOrDefault().Id
-                        };
-                        context.Posts.Add(obj);
-                        await context.SaveChangesAsync();
-                    }
+                    await GeneratePosts(context);
                     await context.SaveChangesAsync();
 
                 }
@@ -71,6 +56,25 @@ namespace Forum
             }
 
             host.Run();
+        }
+
+        private async static Task GeneratePosts(ApplicationDbContext context)
+        {
+            var brandsData = File.ReadAllText("../Forum.DataAccess/SeedData/posts_clean.json");
+            var brands = JsonSerializer.Deserialize<List<Post>>(brandsData);
+
+            foreach (var item in brands)
+            {
+                Post obj = new Post()
+                {
+                    Title = item.Title,
+                    Body = item.Body,
+                    CategoryId = item.CategoryId,
+                    ImageUrl = item.ImageUrl,
+                    ApplicationUserId = context.ApplicationUsers.OrderBy(c => Guid.NewGuid()).FirstOrDefault().Id
+                };
+                await context.Posts.AddAsync(obj);
+            }
         }
 
         private static async Task GenerateUsers(UserManager<IdentityUser> userManager, ApplicationDbContext context)
