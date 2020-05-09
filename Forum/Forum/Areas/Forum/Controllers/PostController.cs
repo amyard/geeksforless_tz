@@ -37,7 +37,12 @@ namespace Forum.Areas.Forum.Controllers
         {
             // using Specification
             var spec = new PostWithSpecification();
-            return View(await _context.GetListAsyncWithSpec(spec));
+            var obj = await _context.GetListAsyncWithSpec(spec);
+            foreach(var item in obj)
+            {
+                item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
+            }
+            return View(obj);
         }
 
         // GET: Forum/Post/Details/5

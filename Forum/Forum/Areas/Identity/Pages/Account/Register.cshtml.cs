@@ -81,9 +81,11 @@ namespace Forum.Areas.Identity.Pages.Account
 
             // custom added additional data
             [Required]
+            [Display(Name = "First Name")]
             [StringLength(50, ErrorMessage = "{0} cannot be longer than {1} characters.")]
             public string FirstName { get; set; }
             [Required]
+            [Display(Name = "Last Name")]
             [StringLength(50, ErrorMessage = "{0} cannot be longer than {1} characters.")]
             public string LastName { get; set; }
 
@@ -134,6 +136,7 @@ namespace Forum.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
+                    ImageUrl = "img_seed/default-user.jpg",
                     Role = Input.Role
                 };
 

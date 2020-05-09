@@ -1,9 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Identity;
-@inject UserManager<IdentityUser> userManager
-
-@using Forum.DataAccess.Data;
-@inject ApplicationDbContext db;
-
 @model IEnumerable<Forum.Models.Post>
 
 @{
@@ -56,7 +51,7 @@
                 <img src="@item.ImageUrl" style="height: 80px;" />
             </td>
             <td>
-                @db.ApplicationUsers.Find(item.ApplicationUserId).FullName (@db.ApplicationUsers.Find(item.ApplicationUserId).UserName)
+                @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Created)
