@@ -154,5 +154,18 @@ namespace Forum.Areas.Forum.Controllers
             await _context.DeleteJsAsync(id);
             return Json(new { success = true, message = "Delete Successful" });
         }
+
+        // get API for admin
+        [HttpGet]
+        public IActionResult GetPostForAdmin()
+        {
+            var objList = _db.Posts.ToList();
+            foreach(var item in objList)
+            {
+                item.Category = _db.Categories.Find(item.CategoryId);
+                item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
+            }
+            return Json(new { data = objList });
+        }
     }
 }

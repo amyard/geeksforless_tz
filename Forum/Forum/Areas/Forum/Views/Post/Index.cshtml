@@ -5,74 +5,36 @@
     ViewData["Title"] = "Index";
 }
 
-<table class="table actionAdminTable">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
-            <th>
-                Author
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Modified)
-            </th>
-            <th>
-                <a asp-action="AddOrEdit" class="btn btn-outline-success">Create New</a>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td id="actionAdminTable-th-id_@item.Id">
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Title)
-            </td>
-            <td>
-                <img src="@item.ImageUrl" style="height: 80px;" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @if (item.Modified.ToString() != "1/1/0001 12:00:00 AM")
-                {
-                    @Html.DisplayFor(modelItem => item.Modified)
-                }
-            </td>
-            <td>
-                <a asp-action="AddOrEdit" asp-route-id="@item.Id" class="btn btn-outline-dark">Edit</a>
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">Details</a>
-                <a class="btn btn-outline-danger" onclick='deleteAction("Post", @item.Id)'>Delete</a>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+<br />
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-primary">Question List</h2>
+    </div>
+    <div class="col-6 text-right">
+        <a class="btn btn-primary" asp-action="AddOrEdit"><i class="fas fa-plus"></i> &nbsp; Create New Question</a>
+    </div>
+</div>
+
+<br />
+<div class="p-4 border rounded">
+    <table id="tblData" class="table table-striped table-bordered" style="width:100%">
+        <thead class="thead-dark">
+            <tr class="table-info">
+                <th>Id</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Image</th>
+                <th>Author</th>
+                <th>Created</th>
+                <th>Modiefied</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
 
 
 @section Scripts{
     <script src="~/js/main.js"></script>
+    <script src="~/js/question.js"></script>
 }
