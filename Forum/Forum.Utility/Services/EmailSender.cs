@@ -16,20 +16,22 @@ namespace Forum.Utility.Services
 
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            string myGmailAddress = "geektz3000@gmail.com";
-            string appSpecificPassword = "mclpfdtdzcnopwva";
-            SmtpClient client = new SmtpClient("smtp.gmail.com");
-            client.EnableSsl = true;
-            client.Port = 587;
-            client.Credentials = new NetworkCredential(myGmailAddress, appSpecificPassword);
+            string myGmailAddress = _config.GetValue<string>("EmailSend:Email");
+            string appSpecificPassword = _config.GetValue<string>("EmailSend:Password");
 
             MailMessage msg = new MailMessage();
             msg.Sender = new MailAddress(myGmailAddress, "Administrator GeekTZ");
             msg.From = new MailAddress(myGmailAddress, "Administrator GeekTZ");
-            msg.To.Add(new MailAddress(email, "Recipient Number 1"));
+            msg.To.Add(new MailAddress(email, "User"));
             msg.Subject = subject;
             msg.Body = htmlMessage;
             msg.IsBodyHtml = true;
+
+            SmtpClient client = new SmtpClient(_config.GetValue<string>("EmailSend:Client"));
+            client.EnableSsl = _config.GetValue<bool>("EmailSend:SSl");
+            client.Port = _config.GetValue<int>("EmailSend:Port");
+            client.Credentials = new NetworkCredential(myGmailAddress, appSpecificPassword);
+
             return client.SendMailAsync(msg);
         }
     }

@@ -37,7 +37,9 @@ namespace Forum
                     Configuration.GetConnectionString("DefaultConnection")));
             
             // override for using Roles
-            services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
+            //services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // email send - EmailSender was created in Forum.Utility -> Services
