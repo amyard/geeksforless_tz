@@ -35,14 +35,6 @@ namespace Forum.Areas.Forum.Controllers
         // GET: Admin/Post
         public async Task<IActionResult> Index()
         {
-            // using Specification
-            //var spec = new PostWithSpecification();
-            //var obj = await _context.GetListAsyncWithSpec(spec);
-            //foreach (var item in obj)
-            //{
-            //    item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
-            //}
-            //return View(obj);
             return View(await _context.GetListAsync());
         }
 
