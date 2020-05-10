@@ -22,6 +22,7 @@ namespace Forum.DataAccess.Repository.IRepository
         Task<IReadOnlyList<T>> GetListAsyncWithSpec(ISpecification<T> spec);
 
 
+        // TODO - override as UnitOfWork for better structure
         // clear post repo
         Post GetByIdAsyncWithComment(int id);
         void AddSubComment(SubComment comment);
