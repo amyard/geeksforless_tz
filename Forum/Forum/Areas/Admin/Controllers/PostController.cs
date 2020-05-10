@@ -16,7 +16,7 @@ using Forum.Utility.Services;
 
 namespace Forum.Areas.Forum.Controllers
 {
-    [Area("Forum")]
+    [Area("Admin")]
     public class PostController : Controller
     {
         private readonly ApplicationDbContext _db;                   // override to repo
@@ -32,20 +32,21 @@ namespace Forum.Areas.Forum.Controllers
             _db = db;
         }
 
-        // GET: Forum/Post
+        // GET: Admin/Post
         public async Task<IActionResult> Index()
         {
             // using Specification
-            var spec = new PostWithSpecification();
-            var obj = await _context.GetListAsyncWithSpec(spec);
-            foreach(var item in obj)
-            {
-                item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
-            }
-            return View(obj);
+            //var spec = new PostWithSpecification();
+            //var obj = await _context.GetListAsyncWithSpec(spec);
+            //foreach (var item in obj)
+            //{
+            //    item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
+            //}
+            //return View(obj);
+            return View(await _context.GetListAsync());
         }
 
-        // GET: Forum/Post/Details/5
+        // GET: Admin/Post/Details/5
         public async Task<IActionResult> Details(int id)
         {
             // using Specification
@@ -56,7 +57,7 @@ namespace Forum.Areas.Forum.Controllers
             return View(post);
         }
 
-        // GET: Forum/Post/Create
+        // GET: Admin/Post/Create
         [Authorize()]
         public async Task<IActionResult> AddOrEdit(int id = 0)
         {
@@ -83,7 +84,7 @@ namespace Forum.Areas.Forum.Controllers
                 return new RedirectResult("~/Identity/Account/AccessDenied");
         }
 
-        // POST: Forum/Post/Create
+        // POST: Admin/Post/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit(PostVM postVM)
@@ -140,7 +141,7 @@ namespace Forum.Areas.Forum.Controllers
             return View(postVM.Post);
         }
 
-        // GET: Forum/Post/Delete/5
+        // GET: Admin/Post/Delete/5
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {

@@ -8,7 +8,7 @@ $(document).ready(function () {
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         "ajax": {
-            "url": "/Forum/Post/GetPostForAdmin"
+            "url": "/Admin/Post/GetPostForAdmin"
         },
         "columns": [
             { 'data': "id", "width": "5%" },
@@ -28,9 +28,9 @@ function loadDataTable() {
                 'data': "id",
                 "render": function (data) {
                     return `
-                        <a href="/Forum/Post/AddOrEdit/${data}" class="btn btn-outline-dark">Edit</a>
-                        <a href="/Forum/Post/AddOrEdit/${data}" class="btn btn-outline-primary">Details</a>
-                        <a class="btn btn-outline-danger" onclick='deleteAction("Post", ${data})'>Delete</a>
+                        <a href="/Admin/Post/AddOrEdit/${data}" class="btn btn-outline-dark">Edit</a>
+                        <a href="/Admin/Post/Details/${data}" class="btn btn-outline-primary">Details</a>
+                        <a class="btn btn-outline-danger" onclick='deleteAction("Admin", "Post", ${data})'>Delete</a>
                         `
                 },
                 "width": "20%"

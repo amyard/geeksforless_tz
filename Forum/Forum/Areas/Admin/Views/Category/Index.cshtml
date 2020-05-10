@@ -33,7 +33,7 @@
                 <td>
                     <a asp-action="AddOrEdit" asp-route-id="@item.Id" class="btn btn-outline-dark">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">Details</a>
-                    <a class="btn btn-outline-danger" onclick='deleteAction("Category", @item.Id)'>Delete</a>
+                    <a class="btn btn-outline-danger" onclick='deleteAction("Admin", "Category", @item.Id)'>Delete</a>
                 </td>
             </tr>
         }

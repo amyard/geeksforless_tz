@@ -29,6 +29,7 @@ namespace Forum.Models
         public ApplicationUser ApplicationUser { get; set; }
 
         [Required]
+        [Display(Name = "Category")]
         public int CategoryId { get; set; }
         public Category Category { get; set; }
     }

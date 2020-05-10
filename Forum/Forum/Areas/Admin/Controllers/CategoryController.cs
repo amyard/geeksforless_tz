@@ -7,7 +7,7 @@ using Forum.Utility;
 
 namespace Forum.Areas.Forum.Controllers
 {
-    [Area("Forum")]
+    [Area("Admin")]
     [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Moderator)]
     public class CategoryController : Controller
     {
