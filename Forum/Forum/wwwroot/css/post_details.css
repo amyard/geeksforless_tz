@@ -6,7 +6,8 @@
     margin-bottom: 0;
 }
 
-.main-comment-form {
+.main-comment-form,
+.sub-comment-form {
     padding: 1rem;
     background-color: #f7f7f8;
     border-radius: 0.5rem;
@@ -17,11 +18,14 @@
 
 
 .main-comment-form__img,
-.main-comment-form__img img {
+.main-comment-form__img img,
+.main-comment-item__author,
+.main-comment-item__author img {
     width: 100px;
 }
 
-.main-comment-form__img img {
+.main-comment-form__img img,
+.main-comment-item__author img {
     background-color: white;
 }
 
@@ -63,15 +67,6 @@
 }
 
 
-.main-comment-item__author,
-.main-comment-item__author img {
-    width: 100px;
-}
-
-.main-comment-item__author img {
-    background-color: white;
-}
-
 .general-info {
     display: grid;
     grid-template-columns: 100px auto 50px;
@@ -92,3 +87,29 @@
 .main-comment-item__message {
     margin-bottom: 12px;
 }
+
+
+
+/************************************************/
+/*****           Sub Comments               *****/
+/************************************************/
+
+.sub-comment-item {
+    margin-left: 100px;
+}
+
+.mb-24 {
+    margin-bottom: 24px;
+}
+ 
+
+
+
+
+
+
+
+
+
+
+
