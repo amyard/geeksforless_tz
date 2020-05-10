@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Forum.Models.Comments;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,7 +25,6 @@ namespace Forum.Models
         public DateTime Modified { get; set; }
 
 
-        
         public string ApplicationUserId { get; set; }
         [ForeignKey("ApplicationUserId")]
         public ApplicationUser ApplicationUser { get; set; }
@@ -32,5 +33,8 @@ namespace Forum.Models
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+
+
+        public List<MainComment> MainComments { set; get; }
     }
 }

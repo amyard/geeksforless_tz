@@ -1,5 +1,6 @@
 ﻿using Forum.DataAccess.Specification;
 using Forum.Models;
+using Forum.Models.Comments;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,5 +20,10 @@ namespace Forum.DataAccess.Repository.IRepository
         // repo with specification
         Task<T> GetByIdAsyncWithSpec(ISpecification<T> spec);
         Task<IReadOnlyList<T>> GetListAsyncWithSpec(ISpecification<T> spec);
+
+
+        // clear post repo
+        Post GetByIdAsyncWithComment(int id);
+        void AddSubComment(SubComment comment);
     }
 }

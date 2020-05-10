@@ -1,9 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Forum.DataAccess.Data;
 using Forum.DataAccess.Repository.IRepository;
 using Forum.DataAccess.Specification;
 using Forum.Models;
+using Forum.Models.Comments;
 using Forum.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -39,11 +42,13 @@ namespace Forum.Areas.Admin.Controllers
         }
 
         // GET: Forum/Home/Details/5
-        public async Task<IActionResult> Details(int id)
+        public IActionResult Details(int id)
         {
             // using Specification
-            var spec = new PostWithSpecification(id);
-            var post = await _context.GetByIdAsyncWithSpec(spec);
+            //var spec = new PostWithSpecification(id);
+            //var post = await _context.GetByIdAsyncWithSpec(spec);
+
+            var post = _context.GetByIdAsyncWithComment(id);
             if (post == null)
                 return NotFound();
             return View(post);
@@ -53,6 +58,43 @@ namespace Forum.Areas.Admin.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        // comment section
+        [HttpPost]
+        public async Task<IActionResult> Comment(CommentVM vm)
+        {
+            if (!ModelState.IsValid)
+                // redirect to same post
+                return RedirectToAction("Details", new { id = vm.PostId });
+
+            var post = _context.GetByIdAsyncWithComment(vm.PostId);
+            if (vm.MainCommentId == 0)
+            {
+                post.MainComments = post.MainComments ?? new List<MainComment>();
+                post.MainComments.Add(new MainComment
+                {
+                    Message = vm.Message,
+                    Created = DateTime.Now,
+                });
+
+                _context.UpdateAsync(post);
+            }
+            else
+            {
+                var comment = new SubComment
+                {
+                    MainCommentId = vm.MainCommentId,
+                    Message = vm.Message,
+                    Created = DateTime.Now,
+                };
+                _context.AddSubComment(comment);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = vm.PostId });
         }
     }
 }

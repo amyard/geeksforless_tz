@@ -2,6 +2,7 @@
 using Forum.DataAccess.Repository.IRepository;
 using Forum.DataAccess.Specification;
 using Forum.Models;
+using Forum.Models.Comments;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,6 +68,24 @@ namespace Forum.DataAccess.Repository
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
+        }
+
+
+
+        // clear Posts repo
+        public Post GetByIdAsyncWithComment(int id)
+        {
+            return _context.Posts
+                .Include(p => p.Category)
+                .Include(p => p.ApplicationUser)
+                .Include(p => p.MainComments)
+                    .ThenInclude(mc => mc.SubComments)
+                .FirstOrDefault(p => p.Id == id);
+        }
+
+        public void AddSubComment(SubComment comment)
+        {
+            _context.SubComments.Add(comment);
         }
     }
 }
