@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Forum.DataAccess.Data;
 using Forum.DataAccess.Repository.IRepository;
@@ -69,6 +70,10 @@ namespace Forum.Areas.Admin.Controllers
                 // redirect to same post
                 return RedirectToAction("Details", new { id = vm.PostId });
 
+            // get logged user
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
             var post = _context.GetByIdAsyncWithComment(vm.PostId);
             if (vm.MainCommentId == 0)
             {
@@ -77,6 +82,7 @@ namespace Forum.Areas.Admin.Controllers
                 {
                     Message = vm.Message,
                     Created = DateTime.Now,
+                    ApplicationUserId = claim.Value,
                 });
 
                 _context.UpdateAsync(post);
@@ -88,6 +94,7 @@ namespace Forum.Areas.Admin.Controllers
                     MainCommentId = vm.MainCommentId,
                     Message = vm.Message,
                     Created = DateTime.Now,
+                    ApplicationUserId = claim.Value,
                 };
                 _context.AddSubComment(comment);
             }

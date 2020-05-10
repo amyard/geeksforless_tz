@@ -208,11 +208,18 @@ namespace Forum.DataAccess.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Message = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
+                    CommentUserId = table.Column<string>(nullable: true),
                     PostId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MainComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MainComments_AspNetUsers_CommentUserId",
+                        column: x => x.CommentUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MainComments_Posts_PostId",
                         column: x => x.PostId,
@@ -229,11 +236,18 @@ namespace Forum.DataAccess.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Message = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
+                    CommentUserId = table.Column<string>(nullable: true),
                     MainCommentId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SubComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubComments_AspNetUsers_CommentUserId",
+                        column: x => x.CommentUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SubComments_MainComments_MainCommentId",
                         column: x => x.MainCommentId,
@@ -282,6 +296,11 @@ namespace Forum.DataAccess.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MainComments_CommentUserId",
+                table: "MainComments",
+                column: "CommentUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MainComments_PostId",
                 table: "MainComments",
                 column: "PostId");
@@ -295,6 +314,11 @@ namespace Forum.DataAccess.Data.Migrations
                 name: "IX_Posts_CategoryId",
                 table: "Posts",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubComments_CommentUserId",
+                table: "SubComments",
+                column: "CommentUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubComments_MainCommentId",

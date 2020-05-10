@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Forum.DataAccess.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200510173535_InitDb")]
+    [Migration("20200510222740_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,10 @@ namespace Forum.DataAccess.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnName("CommentUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -55,6 +59,8 @@ namespace Forum.DataAccess.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("PostId");
 
@@ -68,6 +74,10 @@ namespace Forum.DataAccess.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnName("CommentUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -78,6 +88,8 @@ namespace Forum.DataAccess.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("MainCommentId");
 
@@ -348,6 +360,10 @@ namespace Forum.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Forum.Models.Comments.MainComment", b =>
                 {
+                    b.HasOne("Forum.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Forum.Models.Post", null)
                         .WithMany("MainComments")
                         .HasForeignKey("PostId");
@@ -355,6 +371,10 @@ namespace Forum.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Forum.Models.Comments.SubComment", b =>
                 {
+                    b.HasOne("Forum.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Forum.Models.Comments.MainComment", null)
                         .WithMany("SubComments")
                         .HasForeignKey("MainCommentId")

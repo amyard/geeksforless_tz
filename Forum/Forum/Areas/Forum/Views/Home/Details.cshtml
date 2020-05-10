@@ -4,7 +4,6 @@
 
 @{
     ViewData["Title"] = "Details";
-    var userImg = db.ApplicationUsers.FirstOrDefault(u => u.Email == User.Identity.Name).ImageUrl;
 }
 
 
@@ -54,34 +53,43 @@
 <br>
 <hr>
 
-<div class="comment-section">
-    <div class="main-comment-form">
-        <div class="main-comment-form__img">
-            <img src="/@userImg" alt="Alternate Text" />
-        </div>
-        <form method="post" class="main-comment-form__form"
-              asp-controller="Home" asp-action="Comment">
-            <div class="form-group">
-                <textarea type="text" rows="3" cols="100" class="main-comment-text" placeholder="Add a comment..."></textarea>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="comment-section">
+        <div class="main-comment-form">
+            <div class="main-comment-form__img">
+                <img src="/@db.ApplicationUsers.FirstOrDefault(u => u.Email == User.Identity.Name).ImageUrl" alt="Alternate Text" />
             </div>
 
-            <div class="form-group">
-                <input type="submit" class="comment-btn" value="Add Comment" />
-            </div>
-        </form>
+            @{
+                await Html.RenderPartialAsync("_MainComment", new CommentVM { PostId = Model.Id, MainCommentId = 0 });
+            }
+        </div>
     </div>
-</div>
+}
 
 <div class="comments">
+    @foreach (var c in Model.MainComments)
+    {
     <div class="main-comment-item">
-        <div class="main-comment-item__author">
-
+        <div class="general-info">
+            <div class="main-comment-item__author">
+                <img src="/@db.ApplicationUsers.Find(c.ApplicationUserId).ImageUrl" alt="Author" />
+            </div>
+            <div class="main-comment-item__info">
+                <h5><b>@db.ApplicationUsers.Find(c.ApplicationUserId).FullName</b></h5>
+                <p>Answered @c.Created</p>
+            </div>
+            <div class="main-comment-item__action">
+                <span>+</span>
+            </div>
         </div>
-        <div class="main-comment-item__message">
 
+        <div class="main-comment-item__message">
+            @c.Message
         </div>
     </div>
-
+    }
 </div>
 
 
@@ -107,7 +115,7 @@
             <div style="margin-right: 20px;">
                 <h4>Sub Comments</h4>
                 @{
-                    await Html.RenderPartialAsync("_MainComment", new CommentVM { PostId = Model.Id, MainCommentId = c.Id });
+                    await Html.RenderPartialAsync("_SubComment", new CommentVM { PostId = Model.Id, MainCommentId = c.Id });
                 }
 
                 @foreach (var sc in c.SubComments)

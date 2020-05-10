@@ -5,12 +5,16 @@
 }
 
 
-<div>
-    <form method="post" asp-controller="Home" asp-action="Comment">
-        <input asp-for="PostId" type="hidden" />
-        <input asp-for="MainCommentId" type="hidden" />
-        <input asp-for="Message" />
+<form method="post" class="main-comment-form__form" asp-controller="Home" asp-action="Comment">
+    <input asp-for="PostId" type="hidden" />
+    <input asp-for="MainCommentId" type="hidden" />
 
-        <button type="submit">Submit</button>
-    </form>
-</div>
+    <div class="form-group">
+        <textarea type="text" rows="3" cols="100" asp-for="Message"
+                  class="main-comment-text" placeholder="Add a comment..."></textarea>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" class="comment-btn" value="Add Comment" />
+    </div>
+</form>

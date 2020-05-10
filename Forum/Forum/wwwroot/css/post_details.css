@@ -53,11 +53,42 @@
 /************************************************/
 
 .comments {
-
+    padding: 1rem;
 }
 
 
 .main-comment-item {
     border-bottom: 1px solid grey;
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+
+.main-comment-item__author,
+.main-comment-item__author img {
+    width: 100px;
+}
+
+.main-comment-item__author img {
+    background-color: white;
+}
+
+.general-info {
+    display: grid;
+    grid-template-columns: 100px auto 50px;
+    grid-column-gap: 1rem;
+}
+
+.main-comment-item__info p {
+    color: grey;
+}
+
+.main-comment-item__action span {
+    font-size: 19px;
+    border-radius: 50%;
+    border: 1px solid black;
+    padding: 2px 8px;
+}
+
+.main-comment-item__message {
+    margin-bottom: 12px;
 }

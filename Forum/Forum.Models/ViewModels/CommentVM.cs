@@ -10,5 +10,6 @@ namespace Forum.Models.ViewModels
         public int MainCommentId { set; get; }
         [Required]
         public string Message { get; set; }
+        public string ApplicationUserId { get; set; }
     }
 }
