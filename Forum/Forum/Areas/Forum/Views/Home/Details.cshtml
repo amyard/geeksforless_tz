@@ -54,10 +54,11 @@
 <br>
 <hr>
 
-@if (User.Identity.IsAuthenticated)
-{
-    <div class="comment-section">
-        <h3>Left an Answer:</h3>
+
+<div class="comment-section">
+    <h3>Left an Answer:</h3>
+    @if (User.Identity.IsAuthenticated)
+    {
         <div class="main-comment-form">
             <div class="main-comment-form__img">
                 <img src="/@db.ApplicationUsers.FirstOrDefault(u => u.Email == User.Identity.Name).ImageUrl" alt="Alternate Text" />
@@ -67,8 +68,13 @@
                 await Html.RenderPartialAsync("_MainComment", new CommentVM { PostId = Model.Id, MainCommentId = 0 });
             }
         </div>
-    </div>
-}
+    }
+    else
+    {
+        <h6>Please, <a asp-area="Identity" asp-page="/Account/Login">Log In</a> if you want to left a comment.</h6>
+    }
+</div>
+
 
 <div class="comments">
     @foreach (var c in Model.MainComments)
@@ -82,16 +88,18 @@
                     <h5><b>@db.ApplicationUsers.Find(c.ApplicationUserId).FullName</b></h5>
                     <p>Answered @c.Created</p>
                 </div>
-                
-                @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator) || 
-                     User.Claims.FirstOrDefault().Value == c.ApplicationUserId )
-                {
-                    <div class="main-comment-item__action">
-                        <i class="fas fa-edit mr-3 btn-primary edit-btn"></i>
-                        <i class="fas fa-trash btn-danger" onclick="DeleteMainComment(@c.Id)"></i>
-                    </div>
+                @if (User.Identity.IsAuthenticated)
+                { 
+                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator) ||
+                        User.Claims.FirstOrDefault().Value == c.ApplicationUserId)
+                    {
+                        <div class="main-comment-item__action">
+                            <i class="fas fa-edit mr-3 btn-primary edit-btn"></i>
+                            <i class="fas fa-trash btn-danger" onclick="DeleteMainComment(@c.Id)"></i>
+                        </div>
+                    }
                 }
-            </div>
+                </div>
 
             <div class="main-comment-item__message">
                 @c.Message
@@ -102,6 +110,7 @@
 
                 @foreach (var sc in c.SubComments)
                 {
+                <div class="sc_@sc.Id">
                     <div class="general-info">
                         <div class="main-comment-item__author">
                             <img src="/@db.ApplicationUsers.Find(sc.ApplicationUserId).ImageUrl" alt="Author" />
@@ -110,14 +119,23 @@
                             <h5><b>@db.ApplicationUsers.Find(sc.ApplicationUserId).FullName</b></h5>
                             <p>Answered @sc.Created</p>
                         </div>
-                        <div class="main-comment-item__action">
-                            <span>+</span>
-                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator) ||
+                              User.Claims.FirstOrDefault().Value == sc.ApplicationUserId)
+                            {
+                                <div class="main-comment-item__action">
+                                    <i class="fas fa-edit mr-3 btn-primary edit-btn"></i>
+                                    <i class="fas fa-trash btn-danger" onclick="DeleteSubComment(@sc.Id)"></i>
+                                </div>
+                            }
+                        }
                     </div>
 
                     <div class="main-comment-item__message mb-24">
                         @sc.Message
                     </div>
+                </div>
                 }
 
                 @if (User.Identity.IsAuthenticated)

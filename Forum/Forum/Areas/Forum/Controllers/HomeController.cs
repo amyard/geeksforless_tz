@@ -125,7 +125,25 @@ namespace Forum.Areas.Admin.Controllers
             _db.SubComments.RemoveRange(subComments);
 
             _db.MainComments.Remove(comment);
+            await _db.SaveChangesAsync();
 
+            return Json(new { success = true, message = "Delete Successful" });
+        }
+
+        // Delete main comments and all subcomments
+        [HttpDelete]
+        public async Task<IActionResult> DeleteSubComment(int id)
+        {
+            var comment = await _db.SubComments.FindAsync(id);
+            if (comment == null)
+                return Json(new { success = false, message = "Error while deleting" });
+
+            // Check user permissions
+            bool result = AccessRights.AuthorAdminAccessRight(HttpContext, comment.ApplicationUserId, _db);
+            if (!result)
+                return Json(new { success = false, message = "Access Denied. You do not have rights for deleting." });
+
+            _db.SubComments.Remove(comment);
             await _db.SaveChangesAsync();
 
             return Json(new { success = true, message = "Delete Successful" });
