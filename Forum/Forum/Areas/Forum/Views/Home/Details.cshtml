@@ -12,7 +12,6 @@
     <link href="~/css/post_details.css" rel="stylesheet" />
 }
 
-
 <h1>Details</h1>
 
 <div>
@@ -89,9 +88,9 @@
                     <p>Answered @c.Created</p>
                 </div>
                 @if (User.Identity.IsAuthenticated)
-                { 
+                {
                     @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator) ||
-                        User.Claims.FirstOrDefault().Value == c.ApplicationUserId)
+                  User.Claims.FirstOrDefault().Value == c.ApplicationUserId)
                     {
                         <div class="main-comment-item__action">
                             <i class="fas fa-edit mr-3 btn-primary edit-btn"></i>
@@ -99,7 +98,7 @@
                         </div>
                     }
                 }
-                </div>
+            </div>
 
             <div class="main-comment-item__message">
                 @c.Message
@@ -110,32 +109,32 @@
 
                 @foreach (var sc in c.SubComments)
                 {
-                <div class="sc_@sc.Id">
-                    <div class="general-info">
-                        <div class="main-comment-item__author">
-                            <img src="/@db.ApplicationUsers.Find(sc.ApplicationUserId).ImageUrl" alt="Author" />
-                        </div>
-                        <div class="main-comment-item__info">
-                            <h5><b>@db.ApplicationUsers.Find(sc.ApplicationUserId).FullName</b></h5>
-                            <p>Answered @sc.Created</p>
-                        </div>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator) ||
-                              User.Claims.FirstOrDefault().Value == sc.ApplicationUserId)
+                    <div class="sc_@sc.Id">
+                        <div class="general-info">
+                            <div class="main-comment-item__author">
+                                <img src="/@db.ApplicationUsers.Find(sc.ApplicationUserId).ImageUrl" alt="Author" />
+                            </div>
+                            <div class="main-comment-item__info">
+                                <h5><b>@db.ApplicationUsers.Find(sc.ApplicationUserId).FullName</b></h5>
+                                <p>Answered @sc.Created</p>
+                            </div>
+                            @if (User.Identity.IsAuthenticated)
                             {
-                                <div class="main-comment-item__action">
-                                    <i class="fas fa-edit mr-3 btn-primary edit-btn"></i>
-                                    <i class="fas fa-trash btn-danger" onclick="DeleteSubComment(@sc.Id)"></i>
-                                </div>
+                                @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator) ||
+                            User.Claims.FirstOrDefault().Value == sc.ApplicationUserId)
+                                {
+                                    <div class="main-comment-item__action">
+                                        <i class="fas fa-edit mr-3 btn-primary edit-btn"></i>
+                                        <i class="fas fa-trash btn-danger" onclick="DeleteSubComment(@sc.Id)"></i>
+                                    </div>
+                                }
                             }
-                        }
-                    </div>
+                        </div>
 
-                    <div class="main-comment-item__message mb-24">
-                        @sc.Message
+                        <div class="main-comment-item__message mb-24">
+                            @sc.Message
+                        </div>
                     </div>
-                </div>
                 }
 
                 @if (User.Identity.IsAuthenticated)
@@ -161,4 +160,7 @@
 
 @section Scripts{
     <script src="~/js/question_detail.js"></script>
+
+    $(".main-comment-text").trumbowyg();
+    $("#editor").trumbowyg();
 }
