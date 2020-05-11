@@ -57,12 +57,12 @@
 /************************************************/
 
 .comments {
-    padding: 1rem;
+    padding: 1rem 0rem;
 }
 
 
 .main-comment-item {
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid lightgrey;
     margin-bottom: 2rem;
 }
 
@@ -71,6 +71,8 @@
     display: grid;
     grid-template-columns: 100px auto 100px;
     grid-column-gap: 1rem;
+    background-color: #f7f7f8;
+    padding: 1rem;
 }
 
 .main-comment-item__info p {
@@ -86,6 +88,8 @@
 
 .main-comment-item__message {
     margin-bottom: 12px;
+    box-shadow: 0px 5px 3px grey;
+    padding: 1rem;
 }
 
 
@@ -118,4 +122,5 @@
 .trumbowyg-box, 
 .trumbowyg-editor {
     min-height: 100px;
+    margin:0px;
 }

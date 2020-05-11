@@ -9,6 +9,7 @@
 
 
 @section ExtraCss{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/ui/trumbowyg.min.css">
     <link href="~/css/post_details.css" rel="stylesheet" />
 }
 
@@ -90,10 +91,10 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator) ||
-                  User.Claims.FirstOrDefault().Value == c.ApplicationUserId)
+                User.Claims.FirstOrDefault().Value == c.ApplicationUserId)
                     {
                         <div class="main-comment-item__action">
-                            <i class="fas fa-edit mr-3 btn-primary edit-btn"></i>
+                            <i class="fas fa-edit mr-3 btn-primary edit-btn" data-toggle="modal" data-target="#myModal"></i>
                             <i class="fas fa-trash btn-danger" onclick="DeleteMainComment(@c.Id)"></i>
                         </div>
                     }
@@ -101,7 +102,7 @@
             </div>
 
             <div class="main-comment-item__message">
-                @c.Message
+                @Html.Raw(c.Message)
             </div>
 
             @* Sub comment section *@
@@ -121,7 +122,7 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                                 @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator) ||
-                            User.Claims.FirstOrDefault().Value == sc.ApplicationUserId)
+                          User.Claims.FirstOrDefault().Value == sc.ApplicationUserId)
                                 {
                                     <div class="main-comment-item__action">
                                         <i class="fas fa-edit mr-3 btn-primary edit-btn"></i>
@@ -132,7 +133,7 @@
                         </div>
 
                         <div class="main-comment-item__message mb-24">
-                            @sc.Message
+                            @Html.Raw(sc.Message)
                         </div>
                     </div>
                 }
@@ -158,9 +159,35 @@
 </div>
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
 @section Scripts{
     <script src="~/js/question_detail.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/trumbowyg.min.js"></script>
 
-    $(".main-comment-text").trumbowyg();
-    $("#editor").trumbowyg();
+    <script>
+        $("#editor").trumbowyg();
+        $(".main-comment-text").trumbowyg();
+    </script>
 }
