@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Forum.DataAccess.Data;
@@ -9,6 +10,7 @@ using Forum.DataAccess.Specification;
 using Forum.Models;
 using Forum.Models.Comments;
 using Forum.Models.ViewModels;
+using Forum.Utility.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -102,6 +104,31 @@ namespace Forum.Areas.Admin.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = vm.PostId });
+        }
+
+        // Delete main comments and all subcomments
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMainComment(int id)
+        {
+            var comment = await _db.MainComments.FindAsync(id);
+            if (comment == null)
+                return Json(new { success = false, message = "Error while deleting" });
+
+            // Check user permissions
+            bool result = AccessRights.AuthorAdminAccessRight(HttpContext, comment.ApplicationUserId, _db);
+            if(!result)
+                return Json(new { success = false, message = "Access Denied. You do not have rights for deleting." });
+
+            //var allSub = _db.SubComments.ToList();
+            //allSub.RemoveAll(s => s.MainCommentId == id);
+            var subComments = _db.SubComments.Where(s => s.MainCommentId == id).ToList();
+            _db.SubComments.RemoveRange(subComments);
+
+            _db.MainComments.Remove(comment);
+
+            await _db.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Delete Successful" });
         }
     }
 }

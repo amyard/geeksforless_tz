@@ -70,7 +70,7 @@ namespace Forum.Areas.Forum.Controllers
                 postVM.Post = await _context.GetByIdAsync(id);
 
                 // access to edit have admin, moderator and post author
-                bool result = AccessRights.AuthorAdminAccessRight(HttpContext, postVM, _db);
+                bool result = AccessRights.AuthorAdminAccessRight(HttpContext, postVM.Post.ApplicationUserId, _db);
                 if (result)
                     return View(postVM);
                 return new RedirectResult("~/Identity/Account/AccessDenied");

@@ -1,6 +1,7 @@
 ﻿@model Forum.Models.Post
-@using Forum.DataAccess.Data;
-@inject ApplicationDbContext db;
+@using Forum.DataAccess.Data
+@using Forum.Utility
+@inject ApplicationDbContext db
 
 @{
     ViewData["Title"] = "Details";
@@ -72,63 +73,74 @@
 <div class="comments">
     @foreach (var c in Model.MainComments)
     {
-    <div class="main-comment-item">
-        <div class="general-info">
-            <div class="main-comment-item__author">
-                <img src="/@db.ApplicationUsers.Find(c.ApplicationUserId).ImageUrl" alt="Author" />
-            </div>
-            <div class="main-comment-item__info">
-                <h5><b>@db.ApplicationUsers.Find(c.ApplicationUserId).FullName</b></h5>
-                <p>Answered @c.Created</p>
-            </div>
-            <div class="main-comment-item__action">
-                <span>+</span>
-            </div>
-        </div>
-
-        <div class="main-comment-item__message">
-            @c.Message
-        </div>
-
-        @* Sub comment section *@
-        <div class="sub-comment-item">
-
-            @foreach (var sc in c.SubComments)
-            {
+        <div class="main-comment-item mc_@c.Id">
             <div class="general-info">
                 <div class="main-comment-item__author">
-                    <img src="/@db.ApplicationUsers.Find(sc.ApplicationUserId).ImageUrl" alt="Author" />
+                    <img src="/@db.ApplicationUsers.Find(c.ApplicationUserId).ImageUrl" alt="Author" />
                 </div>
                 <div class="main-comment-item__info">
-                    <h5><b>@db.ApplicationUsers.Find(sc.ApplicationUserId).FullName</b></h5>
-                    <p>Answered @sc.Created</p>
+                    <h5><b>@db.ApplicationUsers.Find(c.ApplicationUserId).FullName</b></h5>
+                    <p>Answered @c.Created</p>
                 </div>
-                <div class="main-comment-item__action">
-                    <span>+</span>
-                </div>
-            </div>
-
-            <div class="main-comment-item__message mb-24">
-                @sc.Message
-            </div>
-            }
-
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div class="comment-section">
-                    <div class="main-comment-form">
-                        <div class="main-comment-form__img">
-                            <img src="/@db.ApplicationUsers.FirstOrDefault(u => u.Email == User.Identity.Name).ImageUrl" alt="Alternate Text" />
-                        </div>
-
-                        @{
-                            await Html.RenderPartialAsync("_SubComment", new CommentVM { PostId = Model.Id, MainCommentId = c.Id });
-                        }
+                
+                @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator) || 
+                     User.Claims.FirstOrDefault().Value == c.ApplicationUserId )
+                {
+                    <div class="main-comment-item__action">
+                        <i class="fas fa-edit mr-3 btn-primary edit-btn"></i>
+                        <i class="fas fa-trash btn-danger" onclick="DeleteMainComment(@c.Id)"></i>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
 
-    </div>
+            <div class="main-comment-item__message">
+                @c.Message
+            </div>
+
+            @* Sub comment section *@
+            <div class="sub-comment-item">
+
+                @foreach (var sc in c.SubComments)
+                {
+                    <div class="general-info">
+                        <div class="main-comment-item__author">
+                            <img src="/@db.ApplicationUsers.Find(sc.ApplicationUserId).ImageUrl" alt="Author" />
+                        </div>
+                        <div class="main-comment-item__info">
+                            <h5><b>@db.ApplicationUsers.Find(sc.ApplicationUserId).FullName</b></h5>
+                            <p>Answered @sc.Created</p>
+                        </div>
+                        <div class="main-comment-item__action">
+                            <span>+</span>
+                        </div>
+                    </div>
+
+                    <div class="main-comment-item__message mb-24">
+                        @sc.Message
+                    </div>
+                }
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="comment-section">
+                        <div class="main-comment-form">
+                            <div class="main-comment-form__img">
+                                <img src="/@db.ApplicationUsers.FirstOrDefault(u => u.Email == User.Identity.Name).ImageUrl" alt="Alternate Text" />
+                            </div>
+
+                            @{
+                                await Html.RenderPartialAsync("_SubComment", new CommentVM { PostId = Model.Id, MainCommentId = c.Id });
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
     }
 </div>
+
+
+@section Scripts{
+    <script src="~/js/question_detail.js"></script>
+}

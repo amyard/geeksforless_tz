@@ -8,7 +8,7 @@ namespace Forum.Utility.Services
     public class AccessRights
     {
 
-        public static bool AuthorAdminAccessRight(HttpContext httpContext, PostVM postVM, ApplicationDbContext db)
+        public static bool AuthorAdminAccessRight(HttpContext httpContext, string authorId, ApplicationDbContext db)
         {
             var userId = GetCurrentUser.GetData(httpContext);
             var user = db.ApplicationUsers.Find(userId);
@@ -17,7 +17,7 @@ namespace Forum.Utility.Services
             var roleId = userRole.FirstOrDefault(u => u.UserId == user.Id).RoleId;
             user.Role = roles.FirstOrDefault(u => u.Id == roleId).Name;
 
-            if (postVM.Post.ApplicationUserId == userId || 
+            if (authorId == userId || 
                 SD.Role_Admin == user.Role || SD.Role_Moderator == user.Role)
                 return true;
             return false;
