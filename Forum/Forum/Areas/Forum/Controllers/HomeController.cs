@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,6 +14,9 @@ using Forum.Models.ViewModels;
 using Forum.Utility.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
+
+
 
 namespace Forum.Areas.Admin.Controllers
 {
@@ -147,6 +151,34 @@ namespace Forum.Areas.Admin.Controllers
             await _db.SaveChangesAsync();
 
             return Json(new { success = true, message = "Delete Successful" });
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateMainComment(string ApplicationUserId, string Id, string Message)
+        {
+            var body = new StreamReader(Request.Body);
+
+            using var reader = new StreamReader(HttpContext.Request.Body);
+            var body2 = await reader.ReadToEndAsync();
+
+            //var dt = await _db.MainComments.FindAsync(comm.Id);
+            //var comment = await _db.MainComments.FindAsync(commentId);
+
+            //if (comment == null)
+            //    return Json(new { success = false, message = "Error while updating" });
+
+            //// Check user permissions
+            //bool result = AccessRights.AuthorAdminAccessRight(HttpContext, comment.ApplicationUserId, _db);
+            //if (!result)
+            //    return Json(new { success = false, message = "Access Denied. You do not have rights for deleting." });
+
+            //if (comment == null)
+            //    comment.Message = message;
+
+            //await _db.SaveChangesAsync();
+            return Json(new { success = true, message = "Update Successful" });
         }
     }
 }
