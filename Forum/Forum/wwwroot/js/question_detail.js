@@ -59,34 +59,6 @@ $('.edit-btn-mail').click(function (event) {
     $("#myModal .trumbowyg-editor").html(msg)
     $('#myModal').modal();
 
-    var commentId = jQuery(event.target).attr("data-id");
-    var userId = jQuery(event.target).attr("data-user");
-
-    $(document).on("click", ".update-modal", function (event) {
-        event.preventDefault();
-        var message = $("#myModal .trumbowyg-editor").html()
-        data = {
-            Id: commentId,
-            ApplicationUserId: userId,
-            Message: message
-        }
-
-        $.ajax({
-            type: "POST",
-            url: `/Forum/Home/UpdateMainComment/`,
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(data),
-            success: function (data) {
-                if (data.success) {
-                    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-                    // toastr.success(data.message);
-                } else {
-                    console.log('Errorrrrrrrrrrrrrrrr')
-                    // toastr.error(data.message);
-                }
-            }
-        })
-
-    })
+    var commentId = jQuery(this).attr("data-id");
+    $(".main-comm-modal").val(   jQuery(event.target).attr("data-id")  );
 })

@@ -86,7 +86,7 @@
                 </div>
                 <div class="main-comment-item__info">
                     <h5><b>@db.ApplicationUsers.Find(c.ApplicationUserId).FullName</b></h5>
-                    <p>Answered @c.Created</p>
+                    <p>Answered @c.Created - ID:@c.Id</p>
                 </div>
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -95,8 +95,7 @@
                     {
                         <div class="main-comment-item__action">
                             <i class="fas fa-edit mr-3 btn-primary edit-btn edit-btn-mail"
-                               data-id="@c.Id"
-                               data-user="@c.ApplicationUserId"></i>
+                               data-id="@c.Id"></i>
                             <i class="fas fa-trash btn-danger" onclick="DeleteMainComment(@c.Id)"></i>
                         </div>
                     }
@@ -173,16 +172,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Message:</label>
-                        <textarea class="form-control main-comment-text modal-textarea" id="editor"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary update-modal">Update</button>
+                @{
+                    await Html.RenderPartialAsync("_MainCommentUpdate", new CommentVM { PostId = Model.Id, 
+                        MainCommentId = Model.MainComments.FirstOrDefault().Id });
+                }
             </div>
         </div>
     </div>

@@ -1,0 +1,20 @@
+﻿@model CommentVM
+
+@{
+
+}
+
+
+<form method="post" class="main-comment-form__form" asp-controller="Home" asp-action="MainCommentUpdate">
+    <input asp-for="PostId" type="hidden" />
+    <input class="main-comm-modal" asp-for="MainCommentId" type="hidden" />
+
+    <div class="form-group">
+        <textarea type="text" rows="3" cols="100" asp-for="Message" id="editor"
+                  class="main-comment-text" placeholder="Add a comment..."></textarea>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" class="comment-btn" value="Update Comment" />
+    </div>
+</form>

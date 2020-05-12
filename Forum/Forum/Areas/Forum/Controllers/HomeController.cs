@@ -156,29 +156,28 @@ namespace Forum.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateMainComment(string ApplicationUserId, string Id, string Message)
+        public async Task<IActionResult> MainCommentUpdate(CommentVM vm)
         {
-            var body = new StreamReader(Request.Body);
+            if (!ModelState.IsValid)
+                // redirect to same post
+                return RedirectToAction("Details", new { id = vm.PostId });
 
-            using var reader = new StreamReader(HttpContext.Request.Body);
-            var body2 = await reader.ReadToEndAsync();
+            if (ModelState.IsValid)
+            {
+                var comment = await _db.MainComments.FindAsync(vm.MainCommentId);
 
-            //var dt = await _db.MainComments.FindAsync(comm.Id);
-            //var comment = await _db.MainComments.FindAsync(commentId);
+                if (comment == null)
+                    return RedirectToAction("Details", new { id = vm.PostId });
 
-            //if (comment == null)
-            //    return Json(new { success = false, message = "Error while updating" });
+                // access to edit have admin, moderator and post author
+                bool result = AccessRights.AuthorAdminAccessRight(HttpContext, comment.ApplicationUserId, _db);
+                if (!result)
+                    return new RedirectResult("~/Identity/Account/AccessDenied");
 
-            //// Check user permissions
-            //bool result = AccessRights.AuthorAdminAccessRight(HttpContext, comment.ApplicationUserId, _db);
-            //if (!result)
-            //    return Json(new { success = false, message = "Access Denied. You do not have rights for deleting." });
-
-            //if (comment == null)
-            //    comment.Message = message;
-
-            //await _db.SaveChangesAsync();
-            return Json(new { success = true, message = "Update Successful" });
+                comment.Message = vm.Message;
+                await _db.SaveChangesAsync();
+            }
+            return RedirectToAction("Details", new { id = vm.PostId });
         }
     }
 }
