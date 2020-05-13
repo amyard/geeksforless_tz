@@ -181,8 +181,8 @@
         @{
             await Html.RenderPartialAsync("_SubCommentUpdate", new SubComment
             {
-                Id = db.SubComments.FirstOrDefault().Id,
-                MainCommentId = db.MainComments.FirstOrDefault().Id
+                Id = 0,
+                MainCommentId = 0
             });
         }
     </div>
