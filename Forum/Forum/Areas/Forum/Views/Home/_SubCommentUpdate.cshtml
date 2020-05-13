@@ -1,8 +1,10 @@
-﻿@model CommentVM
+﻿@using Forum.Models.Comments
+@model SubComment
 
 @{
 
 }
+
 
 <div class="modal-content">
     <div class="modal-header">
@@ -13,8 +15,8 @@
     </div>
     <div class="modal-body">
 
-        <form method="post" class="main-comment-form__form" asp-controller="Home" asp-action="MainCommentUpdate">
-            <input asp-for="PostId" type="hidden" />
+        <form method="post" class="main-comment-form__form" asp-controller="Home" asp-action="SubCommentUpdate">
+            <input class="sub-comm-modal" asp-for="Id" type="hidden" />
             <input class="main-comm-modal" asp-for="MainCommentId" type="hidden" />
 
             <div class="form-group">

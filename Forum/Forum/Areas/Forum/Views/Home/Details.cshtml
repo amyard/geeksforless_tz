@@ -1,5 +1,6 @@
 ﻿@model Forum.Models.Post
 @using Forum.DataAccess.Data
+@using Forum.Models.Comments
 @using Forum.Utility
 @inject ApplicationDbContext db
 
@@ -86,7 +87,7 @@
                 </div>
                 <div class="main-comment-item__info">
                     <h5><b>@db.ApplicationUsers.Find(c.ApplicationUserId).FullName</b></h5>
-                    <p>Answered @c.Created - ID:@c.Id</p>
+                    <p>Answered @c.Created</p>
                 </div>
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -126,7 +127,9 @@
                           User.Claims.FirstOrDefault().Value == sc.ApplicationUserId)
                                 {
                                     <div class="main-comment-item__action">
-                                        <i class="fas fa-edit mr-3 btn-primary edit-btn"></i>
+                                        <i class="fas fa-edit mr-3 btn-primary edit-btn edit-btn-sub"
+                                           data-id="@sc.Id"
+                                           data-mainId="@c.Id"></i>
                                         <i class="fas fa-trash btn-danger" onclick="DeleteSubComment(@sc.Id)"></i>
                                     </div>
                                 }
@@ -164,20 +167,22 @@
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Update Comment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                @{
-                    await Html.RenderPartialAsync("_MainCommentUpdate", new CommentVM { PostId = Model.Id, 
-                        MainCommentId = Model.MainComments.FirstOrDefault().Id });
-                }
-            </div>
-        </div>
+        @{
+            await Html.RenderPartialAsync("_MainCommentUpdate", new CommentVM { PostId = Model.Id, 
+                MainCommentId = Model.MainComments.FirstOrDefault().Id });
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="subModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        @{
+            await Html.RenderPartialAsync("_SubCommentUpdate", new SubComment
+            {
+                Id = db.SubComments.FirstOrDefault().Id,
+                MainCommentId = db.MainComments.FirstOrDefault().Id
+            });
+        }
     </div>
 </div>
 

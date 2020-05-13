@@ -62,3 +62,15 @@ $('.edit-btn-mail').click(function (event) {
     var commentId = jQuery(this).attr("data-id");
     $(".main-comm-modal").val(   jQuery(event.target).attr("data-id")  );
 })
+
+
+
+$('.edit-btn-sub').click(function (event) {
+    event.preventDefault();
+    msg = jQuery(event.target).parent().parent().next().html()
+    $("#subModal .trumbowyg-editor").html(msg)
+    $('#subModal').modal();
+
+    $(".sub-comm-modal").val(jQuery(event.target).attr("data-id"));
+    $(".main-comm-modal").val(jQuery(event.target).attr("data-mainId"));
+})

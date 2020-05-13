@@ -179,5 +179,36 @@ namespace Forum.Areas.Admin.Controllers
             }
             return RedirectToAction("Details", new { id = vm.PostId });
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SubCommentUpdate(SubComment vm)
+        {
+            var mainPostId = vm.MainCommentId;
+            var mainComm = _db.MainComments.Find(mainPostId);
+            var post = _db.Posts.Where(s => s.MainComments.Select(m => m.Id).Contains(mainComm.Id));
+            var postId = post.FirstOrDefault().Id;
+
+            if (!ModelState.IsValid)
+                return RedirectToAction("Details", new { id = postId });
+
+            if (ModelState.IsValid)
+            {
+                var comment = await _db.SubComments.FindAsync(vm.Id);
+
+                if (comment == null)
+                    return RedirectToAction("Details", new { id = postId });
+
+                // access to edit have admin, moderator and post author
+                bool result = AccessRights.AuthorAdminAccessRight(HttpContext, comment.ApplicationUserId, _db);
+                if (!result)
+                    return new RedirectResult("~/Identity/Account/AccessDenied");
+
+                comment.Message = vm.Message;
+                await _db.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Details", new { id = postId });
+        }
     }
 }
