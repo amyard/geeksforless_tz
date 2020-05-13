@@ -12,6 +12,7 @@ using Forum.Utility;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.Json;
+using Forum.Models.Comments;
 
 namespace Forum
 {
@@ -47,6 +48,13 @@ namespace Forum
                     await GeneratePosts(context);
                     await context.SaveChangesAsync();
 
+                    // save data
+                    await GenerateMainComment(context);
+                    await context.SaveChangesAsync();
+
+                    await GenerateSubComment(context);
+                    await context.SaveChangesAsync();
+
                 }
                 catch (Exception ex)
                 {
@@ -56,6 +64,53 @@ namespace Forum
             }
 
             host.Run();
+        }
+
+        private async static Task GenerateSubComment(ApplicationDbContext context)
+        {
+            if (!context.SubComments.Any())
+            {
+                var commentData = File.ReadAllText("../Forum.DataAccess/SeedData/maincomment.json");
+                var comm = JsonSerializer.Deserialize<List<MainComment>>(commentData);
+
+                foreach (var item in comm)
+                {
+                    var comment = new SubComment
+                    {
+                        MainCommentId = context.MainComments.OrderBy(c => Guid.NewGuid()).FirstOrDefault().Id,
+                        Message = item.Message,
+                        Created = DateTime.Now,
+                        ApplicationUserId = context.ApplicationUsers.OrderBy(c => Guid.NewGuid()).FirstOrDefault().Id,
+                    };
+                    await context.SubComments.AddAsync(comment);
+                }
+                await context.SaveChangesAsync();
+            }
+        }
+
+        private async static Task GenerateMainComment(ApplicationDbContext context)
+        {
+            if (!context.MainComments.Any())
+            {
+                var commentData = File.ReadAllText("../Forum.DataAccess/SeedData/maincomment.json");
+                var comm = JsonSerializer.Deserialize<List<MainComment>>(commentData);
+
+                foreach (var item in comm)
+                {
+                    var post = context.Posts.OrderBy(c => Guid.NewGuid()).FirstOrDefault();
+                    post.MainComments = post.MainComments ?? new List<MainComment>();
+
+                    post.MainComments.Add(new MainComment
+                    {
+                        Message = item.Message,
+                        Created = DateTime.Now,
+                        ApplicationUserId = context.ApplicationUsers.OrderBy(c => Guid.NewGuid()).FirstOrDefault().Id
+                    });
+
+                    context.Posts.Update(post);
+                }
+                await context.SaveChangesAsync();
+            }
         }
 
         private async static Task GeneratePosts(ApplicationDbContext context)
