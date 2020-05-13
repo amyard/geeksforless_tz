@@ -168,8 +168,10 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         @{
-            await Html.RenderPartialAsync("_MainCommentUpdate", new CommentVM { PostId = Model.Id, 
-                MainCommentId = Model.MainComments.FirstOrDefault().Id });
+            await Html.RenderPartialAsync("_MainCommentUpdate", new CommentVM {
+                PostId = Model.Id,
+                MainCommentId = 0
+            });
         }
     </div>
 </div>

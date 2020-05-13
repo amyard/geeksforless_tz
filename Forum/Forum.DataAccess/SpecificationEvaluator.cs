@@ -17,7 +17,7 @@ namespace Forum.DataAccess
 
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
-            return query;
+            return query.OrderByDescending(q => q.Id);
         }
     }
 }
