@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Forum.DataAccess.Data;
+using Forum.DataAccess.Helpers;
 using Forum.DataAccess.Repository.IRepository;
 using Forum.DataAccess.Specification;
 using Forum.Models;
@@ -14,7 +14,6 @@ using Forum.Models.ViewModels;
 using Forum.Utility.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Forum.Areas.Admin.Controllers
 {
@@ -34,16 +33,22 @@ namespace Forum.Areas.Admin.Controllers
             _db = db;
         }
 
-        public async Task<IActionResult> Index(int? categoryId)
+        public async Task<IActionResult> Index(PostSpecParams postParams)
         {
             // using Specification
-            var spec = new PostWithSpecification(categoryId);
+            var spec = new PostWithSpecification(postParams);
+
+            var countSpecification = new PostWithFiltersForCountSpecification(postParams);
+            var totalItems = await _context.CountAsync(spec);
+
             var obj = await _context.GetListAsyncWithSpec(spec);
             foreach (var item in obj)
             {
                 item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
             }
-            return View(obj);
+            var data = obj;
+
+            return View(new Pagination<Post>(postParams.PageIndex, postParams.PageSize, totalItems, data));
         }
 
         // GET: Forum/Home/Details/5

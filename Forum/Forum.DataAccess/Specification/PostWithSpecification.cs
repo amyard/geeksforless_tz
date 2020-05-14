@@ -5,13 +5,14 @@ namespace Forum.DataAccess.Specification
     public class PostWithSpecification : BaseSpecification<Post>
     {
         // for list view
-        public PostWithSpecification(int? categoryId)
+        public PostWithSpecification(PostSpecParams postParams)
             : base(x => 
-                (!categoryId.HasValue || x.CategoryId == categoryId)
+                (!postParams.CategoryId.HasValue || x.CategoryId == postParams.CategoryId)
             )
         {
             AddInclude(x => x.ApplicationUser);
             AddInclude(x => x.Category);
+            ApplyPaging(postParams.PageSize * (postParams.PageIndex - 1), postParams.PageSize);
         }
 
         // for detail view

@@ -8,5 +8,12 @@ namespace Forum.DataAccess.Specification
     {
         Expression<Func<T, bool>> Criteria { get; }
         List<Expression<Func<T, object>>> Includes { get; }
+
+
+        // for paggination
+        int Take { get; }
+        int Skip { get; }
+        bool IsPagingEnabled { get; }
+
     }
 }

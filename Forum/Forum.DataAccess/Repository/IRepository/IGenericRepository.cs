@@ -20,6 +20,7 @@ namespace Forum.DataAccess.Repository.IRepository
         // repo with specification
         Task<T> GetByIdAsyncWithSpec(ISpecification<T> spec);
         Task<IReadOnlyList<T>> GetListAsyncWithSpec(ISpecification<T> spec);
+        Task<int> CountAsync(ISpecification<T> spec);
 
 
         // TODO - override as UnitOfWork for better structure

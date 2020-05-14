@@ -21,10 +21,23 @@ namespace Forum.DataAccess.Specification
         public Expression<Func<T, bool>> Criteria { get; }
 
         public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
-
         protected void AddInclude(Expression<Func<T, object>> includeExpression)
         {
             Includes.Add(includeExpression);
         }
+
+
+        // for paggination
+        public int Take { get; private set; }
+        public int Skip { get; private set; }
+        public bool IsPagingEnabled { get; private set; }
+
+        protected void ApplyPaging(int skip, int take)
+        {
+            Skip = skip;
+            Take = take;
+            IsPagingEnabled = true;
+        }
+
     }
 }
