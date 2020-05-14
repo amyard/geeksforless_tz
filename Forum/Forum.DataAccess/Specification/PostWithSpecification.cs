@@ -7,6 +7,7 @@ namespace Forum.DataAccess.Specification
         // for list view
         public PostWithSpecification(PostSpecParams postParams)
             : base(x => 
+                (string.IsNullOrEmpty(postParams.Search) || x.Title.ToLower().Contains(postParams.Search)) && 
                 (!postParams.CategoryId.HasValue || x.CategoryId == postParams.CategoryId)
             )
         {

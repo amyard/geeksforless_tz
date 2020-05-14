@@ -12,5 +12,13 @@
             set => _pageSize = (value > MaxPageSize ? MaxPageSize : value);
         }
         public int? CategoryId { get; set; }
+
+        // search
+        private string _search;
+        public string Search
+        {
+            get => _search;
+            set => _search = value.ToLower();
+        }
     }
 }
