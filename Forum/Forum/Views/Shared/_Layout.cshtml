@@ -1,4 +1,7 @@
 ﻿@using Forum.Utility
+@using Forum.DataAccess.Data
+@inject ApplicationDbContext db
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,24 +30,32 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        
-                        @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator))
+
+                        @foreach (var item in db.Categories.ToList())
                         {
-                            <li class="nav-item dropdown show">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Admin Management
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Post" asp-action="Index">Post</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">Users</a>
-                                </div>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-area=""
+                                   asp-controller="Home"
+                                   asp-action="Index"
+                                   asp-route-categoryid="@item.Id">@item.Title</a>
                             </li>
                         }
-                    </ul>
+
+                                @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Moderator))
+                                {
+                                <li class="nav-item dropdown show">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Admin Management
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Post" asp-action="Index">Post</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">Users</a>
+                                    </div>
+                                </li>
+                            }
+                            </ul>
                 </div>
             </div>
         </nav>

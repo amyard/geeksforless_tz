@@ -34,10 +34,10 @@ namespace Forum.Areas.Admin.Controllers
             _db = db;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoryId)
         {
             // using Specification
-            var spec = new PostWithSpecification();
+            var spec = new PostWithSpecification(categoryId);
             var obj = await _context.GetListAsyncWithSpec(spec);
             foreach (var item in obj)
             {
