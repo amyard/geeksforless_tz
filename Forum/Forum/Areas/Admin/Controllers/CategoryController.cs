@@ -4,6 +4,7 @@ using Forum.Models;
 using Forum.DataAccess;
 using Forum.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
+using Forum.DataAccess.Repository;
 
 namespace Forum.Areas.Forum.Controllers
 {
@@ -11,23 +12,23 @@ namespace Forum.Areas.Forum.Controllers
     [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Moderator)]
     public class CategoryController : Controller
     {
-        private readonly IGenericRepository<Category> _context;
+        private readonly IUnitOfWork _uniofWork;
 
-        public CategoryController(IGenericRepository<Category> context)
+        public CategoryController(IUnitOfWork uniofWork)
         {
-            _context = context;
+            _uniofWork = uniofWork;
         }
 
         // GET: Forum/Category
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GetListAsync());
+            return View(await _uniofWork.Category.GetListAsync());
         }
 
         // GET: Forum/Category/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var category = await _context.GetByIdAsync(id);
+            var category = await _uniofWork.Category.GetByIdAsync(id);
             if (category == null)
                 return NotFound();
             return View(category);
@@ -39,7 +40,7 @@ namespace Forum.Areas.Forum.Controllers
             if (id == 0)
                 return View(new Category());
             else
-                return View(await _context.GetByIdAsync(id));
+                return View(await _uniofWork.Category.GetByIdAsync(id));
         }
 
         // POST: Forum/Category/Create
@@ -50,10 +51,10 @@ namespace Forum.Areas.Forum.Controllers
             if (ModelState.IsValid)
             {
                 if (category.Id == 0)
-                    await _context.CreateAsync(category);
+                    await _uniofWork.Category.CreateAsync(category);
                 else
-                    _context.UpdateAsync(category);
-                await _context.SaveChangesAsync();
+                    _uniofWork.Category.UpdateAsync(category);
+                await _uniofWork.Category.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -63,12 +64,12 @@ namespace Forum.Areas.Forum.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await _context.GetByIdAsync(id);
+            var category = await _uniofWork.Category.GetByIdAsync(id);
             if (category == null)
             {
                 return Json(new { success = false, message = "Error while deleting" });
             }
-            await _context.DeleteJsAsync(id);
+            await _uniofWork.Category.DeleteJsAsync(id);
             return Json(new { success = true, message = "Delete Successful" });
         }
     }

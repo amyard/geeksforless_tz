@@ -27,6 +27,7 @@ namespace Forum
         {
             // repository general
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // save images
             services.AddTransient<IFileManager, FileManager>();
