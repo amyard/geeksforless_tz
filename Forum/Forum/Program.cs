@@ -8,11 +8,11 @@ using Forum.Models;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
-using Forum.Utility;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.Json;
 using Forum.Models.Comments;
+using Forum.DataAccess;
 
 namespace Forum
 {

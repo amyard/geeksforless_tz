@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Forum.Models;
+using Forum.DataAccess;
 using Forum.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
-using Forum.Utility;
 
 namespace Forum.Areas.Forum.Controllers
 {

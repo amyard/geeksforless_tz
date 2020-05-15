@@ -1,4 +1,4 @@
-﻿namespace Forum.Utility
+﻿namespace Forum.DataAccess
 {
     public class SD
     {

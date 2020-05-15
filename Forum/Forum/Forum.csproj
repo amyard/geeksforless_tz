@@ -40,7 +40,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Forum.DataAccess\Forum.DataAccess.csproj" />
     <ProjectReference Include="..\Forum.Models\Forum.Models.csproj" />
-    <ProjectReference Include="..\Forum.Utility\Forum.Utility.csproj" />
   </ItemGroup>
 
 

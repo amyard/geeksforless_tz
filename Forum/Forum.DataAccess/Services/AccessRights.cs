@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Forum.DataAccess.Data;
 using System.Linq;
 
-namespace Forum.Utility.Services
+namespace Forum.DataAccess.Services
 {
     public class AccessRights
     {

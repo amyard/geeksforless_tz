@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Forum.DataAccess.Repository.IRepository;
 using Forum.DataAccess.Repository;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Forum.Utility.Services;
+using Forum.DataAccess.Services;
 
 namespace Forum
 {
@@ -96,8 +96,6 @@ namespace Forum
                     pattern: "{area=Forum}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-
-            // DbSeed.Initial(app, env);
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using Forum.DataAccess.Data;
-using Forum.Utility;
+﻿using Forum.DataAccess;
+using Forum.DataAccess.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
 

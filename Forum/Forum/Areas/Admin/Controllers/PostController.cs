@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Forum.Models;
 using Forum.DataAccess.Repository.IRepository;
-using Forum.Utility;
 using Forum.DataAccess.Data;
 using System;
 using System.Security.Claims;
@@ -11,8 +10,8 @@ using Forum.Models.ViewModels;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
-using Forum.Utility.Services;
-
+using Forum.DataAccess.Services;
+using Forum.DataAccess;
 
 namespace Forum.Areas.Forum.Controllers
 {

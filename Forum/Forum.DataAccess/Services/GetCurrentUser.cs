@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace Forum.Utility.Services
+namespace Forum.DataAccess.Services
 {
     public class GetCurrentUser
     {

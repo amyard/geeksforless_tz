@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using Forum.DataAccess.Data;
 using Forum.DataAccess.Helpers;
 using Forum.DataAccess.Repository.IRepository;
+using Forum.DataAccess.Services;
 using Forum.DataAccess.Specification;
 using Forum.Models;
 using Forum.Models.Comments;
 using Forum.Models.ViewModels;
-using Forum.Utility.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
