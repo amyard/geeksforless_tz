@@ -5,6 +5,14 @@
     <UserSecretsId>aspnet-Forum-77EF57DD-1B6F-422C-9893-A9B5568800A5</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\js\filter.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\filter.js" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.0" />
@@ -39,6 +47,11 @@
   <ItemGroup>
     <Folder Include="wwwroot\images\post\" />
     <Folder Include="wwwroot\img_seed\users\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="wwwroot\js\filter.js" />
   </ItemGroup>
 
 </Project>

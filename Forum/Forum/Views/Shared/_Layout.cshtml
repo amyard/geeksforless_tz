@@ -30,7 +30,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
 
-                    <form class="form-inline my-2 mr-5 my-lg-0"
+                    <form class="form-inline my-2 mr-5 my-lg-0" method="get"
                            asp-controller="Home" asp-action="Index">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
                         <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
@@ -45,7 +45,8 @@
                                    asp-area=""
                                    asp-controller="Home"
                                    asp-action="Index"
-                                   asp-route-categoryid="@item.Id">@item.Title</a>
+                                   asp-route-categoryId="@item.Id"
+                                   onclick="generateNewUrl(event, 'category', @item.Id);">@item.Title</a>
                             </li>
                         }
 
@@ -81,6 +82,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/filter.js" asp-append-version="true"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

@@ -41,16 +41,31 @@ namespace Forum.Areas.Admin.Controllers
             var countSpecification = new PostWithFiltersForCountSpecification(postParams);
             var totalItems = await _context.CountAsync(countSpecification);
 
+            var pagesLast = (int)Math.Ceiling((double)totalItems / (double)postParams.PageSize);
+            var pages = Enumerable.Range(1, pagesLast).ToList();
+
+            // запрос - если номер страница больше максимального числа - срабатывает когда гуляли по пагинации и выбрали категорию
+            if(postParams.PageIndex > pagesLast)
+            {
+                postParams.PageIndex = pagesLast;
+                return RedirectToAction("Index", new
+                {
+                    categoryId = postParams.CategoryId,
+                    pageIndex = postParams.PageIndex,
+                    pageSize = postParams.PageSize,
+                    search = postParams.Search
+                });
+            }
+
             var obj = await _context.GetListAsyncWithSpec(spec);
             foreach (var item in obj)
             {
                 item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
             }
             var data = obj;
-            var pages_int = (int)Math.Ceiling((double)totalItems / (double)postParams.PageSize);
-            var pages = Enumerable.Range(1, pages_int).ToList();
+            
 
-            return View(new Pagination<Post>(postParams.PageIndex, postParams.PageSize, totalItems, pages_int, pages, data));
+            return View(new Pagination<Post>(postParams.PageIndex, postParams.PageSize, totalItems, pagesLast, pages, data));
         }
 
         // GET: Forum/Home/Details/5
