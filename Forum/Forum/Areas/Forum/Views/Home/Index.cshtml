@@ -15,3 +15,39 @@
 }
 
 
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @if (Model.PageIndex - 1 > 0)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Home" asp-action="Index"
+                   asp-route-pageIndex="@(Model.PageIndex-1)">
+                    Previous
+                </a>
+            </li>
+        }
+
+        @foreach (var p in Model.Pages)
+        {
+            <li class="page-item">
+                <a class="page-link @(p == Model.PageIndex ? "btn-primary" : "")"
+                   asp-controller="Home" asp-action="Index"
+                   asp-route-pageIndex="@p">
+                    @p
+                </a>
+            </li>
+        }
+
+        @if (Model.PageIndex < Model.LastPage)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Home" asp-action="Index"
+                   asp-route-pageIndex="@(Model.PageIndex+1)">
+                    Next
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

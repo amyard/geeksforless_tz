@@ -39,7 +39,7 @@ namespace Forum.Areas.Admin.Controllers
             var spec = new PostWithSpecification(postParams);
 
             var countSpecification = new PostWithFiltersForCountSpecification(postParams);
-            var totalItems = await _context.CountAsync(spec);
+            var totalItems = await _context.CountAsync(countSpecification);
 
             var obj = await _context.GetListAsyncWithSpec(spec);
             foreach (var item in obj)
@@ -47,8 +47,10 @@ namespace Forum.Areas.Admin.Controllers
                 item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
             }
             var data = obj;
+            var pages_int = (int)Math.Ceiling((double)totalItems / (double)postParams.PageSize);
+            var pages = Enumerable.Range(1, pages_int).ToList();
 
-            return View(new Pagination<Post>(postParams.PageIndex, postParams.PageSize, totalItems, data));
+            return View(new Pagination<Post>(postParams.PageIndex, postParams.PageSize, totalItems, pages_int, pages, data));
         }
 
         // GET: Forum/Home/Details/5
