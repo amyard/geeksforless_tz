@@ -28,6 +28,8 @@ namespace Forum
             // repository general
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
             services.AddScoped(typeof(ICategoryRepository<>), (typeof(CategoryRepository<>)));
+            services.AddScoped(typeof(IMainCommentRepository<>), (typeof(MainCommentRepository<>)));
+            services.AddScoped(typeof(ISubCommentRepository<>), (typeof(SubCommentRepository<>)));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // save images

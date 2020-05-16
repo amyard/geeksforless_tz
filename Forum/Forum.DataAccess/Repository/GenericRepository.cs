@@ -81,12 +81,6 @@ namespace Forum.DataAccess.Repository
                 .FirstOrDefault(p => p.Id == id);
         }
 
-        public void AddSubComment(SubComment comment)
-        {
-            _context.SubComments.Add(comment);
-
-        }
-
         public void DeleteAllCommentByPostId(int id)
         {
             var mainComments = _context.Posts.Where(c => c.Id == id).Select(o => o.MainComments).ToList();

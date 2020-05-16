@@ -68,10 +68,6 @@ namespace Forum.Areas.Admin.Controllers
         // GET: Forum/Home/Details/5
         public IActionResult Details(int id)
         {
-            // using Specification
-            //var spec = new PostWithSpecification(id);
-            //var post = await _context.GetByIdAsyncWithSpec(spec);
-
             var post = _uniofWork.Post.GetByIdAsyncWithComment(id);
             if (post == null)
                 return NotFound();
@@ -83,6 +79,10 @@ namespace Forum.Areas.Admin.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+
+
 
 
         // comment section
@@ -97,18 +97,9 @@ namespace Forum.Areas.Admin.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var post = _uniofWork.Post.GetByIdAsyncWithComment(vm.PostId);
             if (vm.MainCommentId == 0)
             {
-                post.MainComments = post.MainComments ?? new List<MainComment>();
-                post.MainComments.Add(new MainComment
-                {
-                    Message = vm.Message,
-                    Created = DateTime.Now,
-                    ApplicationUserId = claim.Value,
-                });
-
-                _uniofWork.Post.UpdateAsync(post);
+                _uniofWork.MainComment.AddCommentFromCommentView(vm, claim);
             }
             else
             {
@@ -119,7 +110,7 @@ namespace Forum.Areas.Admin.Controllers
                     Created = DateTime.Now,
                     ApplicationUserId = claim.Value,
                 };
-                _uniofWork.Post.AddSubComment(comment);
+                _db.SubComments.Add(comment);
             }
 
             await _uniofWork.SaveChangesAsync();
@@ -127,11 +118,12 @@ namespace Forum.Areas.Admin.Controllers
             return RedirectToAction("Details", new { id = vm.PostId });
         }
 
+
         // Delete main comments and all subcomments
         [HttpDelete]
         public async Task<IActionResult> DeleteMainComment(int id)
         {
-            var comment = await _db.MainComments.FindAsync(id);
+            var comment = await _uniofWork.MainComment.GetByIdAsync(id);
             if (comment == null)
                 return Json(new { success = false, message = "Error while deleting" });
 
@@ -140,13 +132,8 @@ namespace Forum.Areas.Admin.Controllers
             if(!result)
                 return Json(new { success = false, message = "Access Denied. You do not have rights for deleting." });
 
-            //var allSub = _db.SubComments.ToList();
-            //allSub.RemoveAll(s => s.MainCommentId == id);
-            var subComments = _db.SubComments.Where(s => s.MainCommentId == id).ToList();
-            _db.SubComments.RemoveRange(subComments);
-
-            _db.MainComments.Remove(comment);
-            await _db.SaveChangesAsync();
+            await _uniofWork.MainComment.DeleteMainAndSubComments(id);    
+            await _uniofWork.SaveChangesAsync();
 
             return Json(new { success = true, message = "Delete Successful" });
         }
@@ -155,7 +142,7 @@ namespace Forum.Areas.Admin.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteSubComment(int id)
         {
-            var comment = await _db.SubComments.FindAsync(id);
+            var comment = await _uniofWork.SubComment.GetByIdAsync(id);
             if (comment == null)
                 return Json(new { success = false, message = "Error while deleting" });
 
@@ -164,8 +151,9 @@ namespace Forum.Areas.Admin.Controllers
             if (!result)
                 return Json(new { success = false, message = "Access Denied. You do not have rights for deleting." });
 
-            _db.SubComments.Remove(comment);
-            await _db.SaveChangesAsync();
+            //_uniofWork.SubComment.DeleteComment(id);
+            _db.Remove(comment);
+            await _uniofWork.SaveChangesAsync();
 
             return Json(new { success = true, message = "Delete Successful" });
         }
@@ -192,7 +180,7 @@ namespace Forum.Areas.Admin.Controllers
                     return new RedirectResult("~/Identity/Account/AccessDenied");
 
                 comment.Message = vm.Message;
-                await _db.SaveChangesAsync();
+                await _uniofWork.SaveChangesAsync();
             }
             return RedirectToAction("Details", new { id = vm.PostId });
         }
@@ -222,7 +210,7 @@ namespace Forum.Areas.Admin.Controllers
                     return new RedirectResult("~/Identity/Account/AccessDenied");
 
                 comment.Message = vm.Message;
-                await _db.SaveChangesAsync();
+                await _uniofWork.SaveChangesAsync();
             }
 
             return RedirectToAction("Details", new { id = postId });
