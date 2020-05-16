@@ -1,6 +1,7 @@
 ﻿using Forum.DataAccess.Specification;
 using Forum.Models;
 using Forum.Models.Comments;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,15 +18,21 @@ namespace Forum.DataAccess.Repository.IRepository
         Task<bool> SaveChangesAsync();
 
 
+
+
         // repo with specification
         Task<T> GetByIdAsyncWithSpec(ISpecification<T> spec);
         Task<IReadOnlyList<T>> GetListAsyncWithSpec(ISpecification<T> spec);
         Task<int> CountAsync(ISpecification<T> spec);
 
 
-        // TODO - override as UnitOfWork for better structure
         // clear post repo
         Post GetByIdAsyncWithComment(int id);
         void AddSubComment(SubComment comment);
+        void DeleteAllCommentByPostId(int id);
+
+
+        // category
+        IEnumerable<SelectListItem> GetSelectListAsync();
     }
-}
+} 

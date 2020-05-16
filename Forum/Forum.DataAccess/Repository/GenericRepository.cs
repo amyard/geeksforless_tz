@@ -3,6 +3,7 @@ using Forum.DataAccess.Repository.IRepository;
 using Forum.DataAccess.Specification;
 using Forum.Models;
 using Forum.Models.Comments;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,6 +93,27 @@ namespace Forum.DataAccess.Repository
         public void AddSubComment(SubComment comment)
         {
             _context.SubComments.Add(comment);
+
+        }
+
+        public void DeleteAllCommentByPostId(int id)
+        {
+            var mainComments = _context.Posts.Where(c => c.Id == id).Select(o => o.MainComments).ToList();
+
+            foreach (var comm in mainComments)
+            {
+                _context.RemoveRange(comm);
+            }
+            _context.SaveChanges();
+        }
+
+        public IEnumerable<SelectListItem> GetSelectListAsync()
+        {
+            return _context.Categories.ToList().Select(i => new SelectListItem
+            {
+                Text = i.Title,
+                Value = i.Id.ToString()
+            });
         }
     }
 }

@@ -38,10 +38,10 @@ namespace Forum
 
                     // generate data must be here
                     await GenerateCategories(context);
-                    await GenerateRolesAsync(roleManager, context);
-                    await GenerateAdmin(userManager, context);
-                    await GenerateModerator(userManager, context);
-                    await GenerateUsers(userManager, context);
+                    await GenerateRolesAsync(roleManager);
+                    await GenerateAdmin(userManager);
+                    await GenerateModerator(userManager);
+                    await GenerateUsers(userManager);
                     await context.SaveChangesAsync();
 
                     // save data
@@ -135,7 +135,7 @@ namespace Forum
             }
         }
 
-        private static async Task GenerateUsers(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        private static async Task GenerateUsers(UserManager<IdentityUser> userManager)
         {
             var users = new List<ApplicationUser>
             {
@@ -173,12 +173,12 @@ namespace Forum
 
             foreach (ApplicationUser user in users)
             {
-                var result = await userManager.CreateAsync(user, "Admin123*");
+                await userManager.CreateAsync(user, "Admin123*");
                 await userManager.AddToRoleAsync(user, SD.Role_User);
             }
         }
 
-        private static async Task GenerateModerator(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        private static async Task GenerateModerator(UserManager<IdentityUser> userManager)
         {
             var users = new List<ApplicationUser>
             {
@@ -192,12 +192,12 @@ namespace Forum
 
             foreach(ApplicationUser user in users)
             {
-                var result = await userManager.CreateAsync(user, "Admin123*");
+                await userManager.CreateAsync(user, "Admin123*");
                 await userManager.AddToRoleAsync(user, SD.Role_Moderator);
             }
         }
 
-        private static async Task GenerateAdmin(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        private static async Task GenerateAdmin(UserManager<IdentityUser> userManager)
         {
             var user = new ApplicationUser
             {
@@ -209,11 +209,11 @@ namespace Forum
                 EmailConfirmed = true
             };
 
-            var result = await userManager.CreateAsync(user, "Admin123*");
+            await userManager.CreateAsync(user, "Admin123*");
             await userManager.AddToRoleAsync(user, SD.Role_Admin);
         }
 
-        public static async Task GenerateRolesAsync(RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
+        public static async Task GenerateRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             if (!await roleManager.RoleExistsAsync(SD.Role_Admin))
                 await roleManager.CreateAsync(new IdentityRole(SD.Role_Admin));
