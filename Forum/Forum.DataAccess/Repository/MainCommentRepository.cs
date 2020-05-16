@@ -30,6 +30,7 @@ namespace Forum.DataAccess.Repository
                 ApplicationUserId = claim.Value,
             });
             _context.Posts.Update(post);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteMainAndSubComments(int id)

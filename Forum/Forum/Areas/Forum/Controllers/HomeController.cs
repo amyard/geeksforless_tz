@@ -98,20 +98,9 @@ namespace Forum.Areas.Admin.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             if (vm.MainCommentId == 0)
-            {
-                _uniofWork.MainComment.AddCommentFromCommentView(vm, claim);
-            }
+                await _uniofWork.MainComment.AddCommentFromCommentView(vm, claim);
             else
-            {
-                var comment = new SubComment
-                {
-                    MainCommentId = vm.MainCommentId,
-                    Message = vm.Message,
-                    Created = DateTime.Now,
-                    ApplicationUserId = claim.Value,
-                };
-                _db.SubComments.Add(comment);
-            }
+                await _uniofWork.SubComment.AddCommentFromCommentView(vm, claim);
 
             await _uniofWork.SaveChangesAsync();
 
