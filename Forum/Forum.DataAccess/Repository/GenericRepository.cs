@@ -106,14 +106,5 @@ namespace Forum.DataAccess.Repository
             }
             _context.SaveChanges();
         }
-
-        public IEnumerable<SelectListItem> GetSelectListAsync()
-        {
-            return _context.Categories.ToList().Select(i => new SelectListItem
-            {
-                Text = i.Title,
-                Value = i.Id.ToString()
-            });
-        }
     }
 }

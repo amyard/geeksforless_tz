@@ -6,7 +6,7 @@ namespace Forum.DataAccess.Repository
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<Category> Category { get; }
+        ICategoryRepository<Category> Category { get; }
         IGenericRepository<Post> Post { get; }
     }
 }

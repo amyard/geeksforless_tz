@@ -8,7 +8,7 @@ namespace Forum.DataAccess.Repository
     {
         private readonly ApplicationDbContext _db;
         public UnitOfWork(ApplicationDbContext db,
-            IGenericRepository<Category> _category,
+            ICategoryRepository<Category> _category,
             IGenericRepository<Post> _post)
         {
             _db = db;
@@ -16,7 +16,7 @@ namespace Forum.DataAccess.Repository
             Post = _post;
         }
 
-        public IGenericRepository<Category> Category { get; set; }
+        public ICategoryRepository<Category> Category { get; set; }
         public IGenericRepository<Post> Post { get; set; }
 
 

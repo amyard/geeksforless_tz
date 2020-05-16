@@ -8,7 +8,6 @@ using System.Security.Claims;
 using Forum.DataAccess.Specification;
 using Forum.Models.ViewModels;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 using Forum.DataAccess.Services;
 using Forum.DataAccess;

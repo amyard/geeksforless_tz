@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Forum.DataAccess.Data;
 using Forum.DataAccess.Helpers;
+using Forum.DataAccess.Repository;
 using Forum.DataAccess.Repository.IRepository;
 using Forum.DataAccess.Services;
 using Forum.DataAccess.Specification;
@@ -13,23 +14,19 @@ using Forum.Models;
 using Forum.Models.Comments;
 using Forum.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Forum.Areas.Admin.Controllers
 {
     [Area("Forum")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork _uniofWork;
         private readonly ApplicationDbContext _db;                  
-        private readonly IGenericRepository<Post> _context;
 
-        public HomeController(ILogger<HomeController> logger,
-            IGenericRepository<Post> context,
+        public HomeController(IUnitOfWork uniofWork,
             ApplicationDbContext db)
         {
-            _logger = logger;
-            _context = context;
+            _uniofWork = uniofWork;
             _db = db;
         }
 
@@ -39,7 +36,7 @@ namespace Forum.Areas.Admin.Controllers
             var spec = new PostWithSpecification(postParams);
 
             var countSpecification = new PostWithFiltersForCountSpecification(postParams);
-            var totalItems = await _context.CountAsync(countSpecification);
+            var totalItems = await _uniofWork.Post.CountAsync(countSpecification);
 
             var pagesLast = (int)Math.Ceiling((double)totalItems / (double)postParams.PageSize);
             var pages = Enumerable.Range(1, pagesLast).ToList();
@@ -57,7 +54,7 @@ namespace Forum.Areas.Admin.Controllers
                 });
             }
 
-            var obj = await _context.GetListAsyncWithSpec(spec);
+            var obj = await _uniofWork.Post.GetListAsyncWithSpec(spec);
             foreach (var item in obj)
             {
                 item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
@@ -75,7 +72,7 @@ namespace Forum.Areas.Admin.Controllers
             //var spec = new PostWithSpecification(id);
             //var post = await _context.GetByIdAsyncWithSpec(spec);
 
-            var post = _context.GetByIdAsyncWithComment(id);
+            var post = _uniofWork.Post.GetByIdAsyncWithComment(id);
             if (post == null)
                 return NotFound();
             return View(post);
@@ -100,7 +97,7 @@ namespace Forum.Areas.Admin.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var post = _context.GetByIdAsyncWithComment(vm.PostId);
+            var post = _uniofWork.Post.GetByIdAsyncWithComment(vm.PostId);
             if (vm.MainCommentId == 0)
             {
                 post.MainComments = post.MainComments ?? new List<MainComment>();
@@ -111,7 +108,7 @@ namespace Forum.Areas.Admin.Controllers
                     ApplicationUserId = claim.Value,
                 });
 
-                _context.UpdateAsync(post);
+                _uniofWork.Post.UpdateAsync(post);
             }
             else
             {
@@ -122,10 +119,10 @@ namespace Forum.Areas.Admin.Controllers
                     Created = DateTime.Now,
                     ApplicationUserId = claim.Value,
                 };
-                _context.AddSubComment(comment);
+                _uniofWork.Post.AddSubComment(comment);
             }
 
-            await _context.SaveChangesAsync();
+            await _uniofWork.Post.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = vm.PostId });
         }

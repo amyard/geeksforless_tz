@@ -30,9 +30,5 @@ namespace Forum.DataAccess.Repository.IRepository
         Post GetByIdAsyncWithComment(int id);
         void AddSubComment(SubComment comment);
         void DeleteAllCommentByPostId(int id);
-
-
-        // category
-        IEnumerable<SelectListItem> GetSelectListAsync();
     }
 } 
