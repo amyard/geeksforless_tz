@@ -1,6 +1,7 @@
 ﻿using Forum.DataAccess.Data;
 using Forum.DataAccess.Repository.IRepository;
 using Forum.Models;
+using System.Threading.Tasks;
 
 namespace Forum.DataAccess.Repository
 {
@@ -23,6 +24,15 @@ namespace Forum.DataAccess.Repository
         public void Dispose()
         {
             _db.Dispose();
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            if (await _db.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Forum.DataAccess.Specification;
 using Forum.Models;
 using Forum.Models.Comments;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,9 +14,6 @@ namespace Forum.DataAccess.Repository.IRepository
         Task CreateAsync(T entity);
         void UpdateAsync(T entity);
         Task<T> DeleteJsAsync(int id);
-        Task<bool> SaveChangesAsync();
-
-
 
 
         // repo with specification

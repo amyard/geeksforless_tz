@@ -54,7 +54,7 @@ namespace Forum.Areas.Forum.Controllers
                     await _uniofWork.Category.CreateAsync(category);
                 else
                     _uniofWork.Category.UpdateAsync(category);
-                await _uniofWork.Category.SaveChangesAsync();
+                await _uniofWork.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(category);

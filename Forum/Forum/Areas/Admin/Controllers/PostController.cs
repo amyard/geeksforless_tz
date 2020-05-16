@@ -121,7 +121,7 @@ namespace Forum.Areas.Forum.Controllers
                         objFromDb.Modified = DateTime.Now;
                     }
                 }
-                await _uniofWork.Post.SaveChangesAsync();
+                await _uniofWork.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(postVM.Post);

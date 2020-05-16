@@ -1,6 +1,7 @@
 ﻿using Forum.DataAccess.Repository.IRepository;
 using Forum.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Forum.DataAccess.Repository
 {
@@ -8,5 +9,6 @@ namespace Forum.DataAccess.Repository
     {
         ICategoryRepository<Category> Category { get; }
         IGenericRepository<Post> Post { get; }
+        Task<bool> SaveChangesAsync();
     }
 }

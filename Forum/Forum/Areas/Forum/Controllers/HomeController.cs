@@ -122,7 +122,7 @@ namespace Forum.Areas.Admin.Controllers
                 _uniofWork.Post.AddSubComment(comment);
             }
 
-            await _uniofWork.Post.SaveChangesAsync();
+            await _uniofWork.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = vm.PostId });
         }

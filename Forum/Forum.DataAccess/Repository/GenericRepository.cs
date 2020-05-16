@@ -48,15 +48,6 @@ namespace Forum.DataAccess.Repository
             _context.Update(entity);
         }
 
-        public async Task<bool> SaveChangesAsync()
-        {
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                return true;
-            }
-            return false;
-        }
-
         public async Task<T> GetByIdAsyncWithSpec(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).FirstOrDefaultAsync();
