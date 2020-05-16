@@ -20,12 +20,11 @@ namespace Forum.DataAccess.Repository
             _context = context;
         }
 
-        public async Task<T> DeleteJsAsync(int id)
+        public async Task DeleteJsAsync(int id)
         {
             var objData = await _context.Set<T>().FindAsync(id);
             _context.Remove(objData);
             await _context.SaveChangesAsync();
-            return objData;
         }
 
         public async Task<T> GetByIdAsync(int id)

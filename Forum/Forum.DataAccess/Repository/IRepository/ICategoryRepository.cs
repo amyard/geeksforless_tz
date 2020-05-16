@@ -11,7 +11,7 @@ namespace Forum.DataAccess.Repository.IRepository
         Task<IReadOnlyList<T>> GetListAsync();
         Task CreateAsync(T entity);
         void UpdateAsync(T entity);
-        Task<T> DeleteJsAsync(int id);
+        Task DeleteJsAsync(int id);
         IEnumerable<SelectListItem> GetSelectListAsync();
     }
 }

@@ -13,7 +13,7 @@ namespace Forum.DataAccess.Repository.IRepository
 
         Task CreateAsync(T entity);
         void UpdateAsync(T entity);
-        Task<T> DeleteJsAsync(int id);
+        Task DeleteJsAsync(int id);
 
 
         // repo with specification
