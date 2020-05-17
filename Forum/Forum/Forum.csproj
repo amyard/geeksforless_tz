@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\post\" />
+    <Folder Include="wwwroot\images\users\" />
     <Folder Include="wwwroot\img_seed\users\" />
   </ItemGroup>
 

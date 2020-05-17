@@ -35,6 +35,8 @@ namespace Forum.Areas.Admin.Controllers
             _db = db;
         }
 
+        public string StatusMessage { get; set; }
+
         public async Task<IActionResult> Index(PostSpecParams postParams)
         {
             // using Specification

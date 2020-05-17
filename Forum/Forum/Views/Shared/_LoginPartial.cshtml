@@ -9,7 +9,7 @@
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                @db.ApplicationUsers.FirstOrDefault(u => u.Email == User.Identity.Name).FullName
+                <img src="/@db.ApplicationUsers.FirstOrDefault(u => u.Email == User.Identity.Name).ImageUrl" alt="User" class="header-profile-img" />
             </a>
         </li>
         <li class="nav-item">

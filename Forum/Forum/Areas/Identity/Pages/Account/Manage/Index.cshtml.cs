@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Forum.DataAccess;
+using Forum.DataAccess.Data;
+using Forum.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,16 +17,23 @@ namespace Forum.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ApplicationDbContext _context;
+        private readonly IFileManager _fileManager;     // for upload images on server
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ApplicationDbContext context,
+            IFileManager fileManager)
         {
+            _fileManager = fileManager;
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         public string Username { get; set; }
+        public string ImageUrl { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -35,18 +46,36 @@ namespace Forum.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+
+            // custom added additional data
+            [Required]
+            [Display(Name = "First Name")]
+            [StringLength(50, ErrorMessage = "{0} cannot be longer than {1} characters.")]
+            public string FirstName { get; set; }
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(50, ErrorMessage = "{0} cannot be longer than {1} characters.")]
+            public string LastName { get; set; }
+            public string ImageUrl { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var firstName = _context.ApplicationUsers.Where(a=>a.Email == user.Email).ToList().FirstOrDefault().FirstName;
+            var lastName = _context.ApplicationUsers.Where(a => a.Email == user.Email).ToList().FirstOrDefault().LastName;
+            var imageUrl = _context.ApplicationUsers.Where(a => a.Email == user.Email).ToList().FirstOrDefault().ImageUrl;
 
             Username = userName;
+            ImageUrl = imageUrl;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FirstName = firstName,
+                LastName = lastName,
             };
         }
 
@@ -88,6 +117,26 @@ namespace Forum.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
+
+            // save new user data
+            var obj = _context.ApplicationUsers.Where(a => a.Email == user.Email).ToList().FirstOrDefault();
+            if(obj.Id != null)
+            { 
+                obj.FirstName = Input.FirstName;
+                obj.LastName = Input.LastName;
+                obj.PhoneNumber = Input.PhoneNumber;
+
+                // SAVE IMAGE
+                var files = HttpContext.Request.Form.Files;
+                if (files.Count > 0)
+                {
+                    // DELETE OLD IMAGE
+                    _fileManager.RemoveImage(obj.ImageUrl);
+                    obj.ImageUrl = await _fileManager.SaveImage(files, SD.Users_Image_Base_Path, SD.Users_Image_Result_Path);
+                }
+                await _context.SaveChangesAsync();
+            }
+
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }
