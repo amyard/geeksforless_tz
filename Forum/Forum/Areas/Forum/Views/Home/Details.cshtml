@@ -29,10 +29,10 @@
                User.Claims.FirstOrDefault().Value == Model.ApplicationUserId)
             {
             <div class="main-comment-item__action">
-                <a class="btn btn-warning mb-2" asp-action="AddOrEdit">
+                <a class="btn btn-warning mb-2" asp-route-id="@Model.Id" asp-action="AddOrEdit">
                     <i class="fas fa-edit"></i> <span class="detail-post-actions"> &nbsp; Update Question</span>
                 </a>
-                <a class="btn btn-danger" asp-action="AddOrEdit">
+                <a class="btn btn-danger" onclick='deleteAction("Forum", "Home", @Model.Id)'>
                     <i class="fas fa-trash"></i> <span class="detail-post-actions">&nbsp; Delete Question</span>
                 </a>
             </div>
@@ -190,6 +190,7 @@
 
 @section Scripts{
     <script src="~/js/question_detail.js"></script>
+    <script src="~/js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/trumbowyg.min.js"></script>
 
     <script>

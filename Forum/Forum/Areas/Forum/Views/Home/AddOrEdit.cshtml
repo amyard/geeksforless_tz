@@ -1,0 +1,102 @@
+﻿@model Forum.Models.ViewModels.PostVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@section ExtraCss {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/ui/trumbowyg.min.css">
+}
+
+
+<h1>Create</h1>
+
+<h4>Post</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="AddOrEdit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Post.Id" />
+            <div class="form-group">
+                <label asp-for="Post.Title" class="control-label"></label>
+                <input asp-for="Post.Title" class="form-control" />
+                <span asp-validation-for="Post.Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Post.CategoryId" class="control-label"></label>
+                @Html.DropDownListFor(m => m.Post.CategoryId,
+                                    Model.CategoryList,
+                                    "---Select a Category---",
+                                    new { @class = "form-control" })
+                <span asp-validation-for="Post.CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Post.Body" class="control-label"></label>
+                <textarea asp-for="Post.Body" class="form-control" id="editor"></textarea>
+                <span asp-validation-for="Post.Body" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Post.ImageUrl" class="control-label"></label>
+                <input type="file" name="files" id="uploadBox" multiple class="form-conrtol" />
+                <span asp-validation-for="Post.ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    @if (Model.Post.Id != 0)
+                    {
+                        <input type="submit" value="Submit" class="btn btn-primary btn-block" />
+                    }
+                    else
+                    {
+                        <button type="submit" onclick="return validateInput()" class="btn btn-primary btn-block">Create</button>
+                    }
+                </div>
+                <div class="form-group col-md-6">
+                    <a asp-action="Index" class="btn btn-secondary btn-block"><i class="fade fa-table mr-2"></i>Back to Main</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-4">
+        <img src="@Model.Post.ImageUrl" alt="" class="image-display-editor" style="width:100%;" />
+    </div>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/trumbowyg.min.js"></script>
+
+    <script>
+        function validateInput() {
+            if (document.getElementById('uploadBox').value == "") {
+                swal('Error', 'Please, select an image', 'error')
+                return false;
+            }
+            return true;
+        }
+
+        // for editor
+        $("#editor").trumbowyg();
+
+        // display loaded image in right section
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('.image-display-editor').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $("#uploadBox").change(function() {
+            readURL(this);
+        });
+    </script>
+}

@@ -13,6 +13,7 @@
                 success: function (data) {
                     if (data.success) {
                         toastr.success(data.message);
+
                         // Category delete
                         if ($(".actionAdminTable").length != 0) {
                             $(`#actionAdminTable-th-id_${ids}`).parent().remove();
@@ -24,6 +25,11 @@
                                     : null
                             })
                         }
+
+                        // delete post
+                        if (area == "Forum" && model == "Home") {
+                            window.location.href = window.location.origin;
+                        }  
                     } else {
                         toastr.error(data.message);
                     }
