@@ -78,7 +78,7 @@
 
 
 <div class="comments">
-    @foreach (var c in Model.MainComments)
+    @foreach (var c in Model.MainComments.OrderByDescending(c=>c.Created))
     {
         <div class="main-comment-item mc_@c.Id">
             <div class="general-info">
@@ -110,7 +110,7 @@
             @* Sub comment section *@
             <div class="sub-comment-item">
 
-                @foreach (var sc in c.SubComments)
+                @foreach (var sc in c.SubComments.OrderByDescending(sc=>sc.Id))
                 {
                     <div class="sc_@sc.Id">
                         <div class="general-info">

@@ -90,5 +90,10 @@ namespace Forum.DataAccess.Repository
             }
             _context.SaveChanges();
         }
+
+        public Post GetPostByMainCommentId(int id)
+        {
+            return _context.Posts.Where(s => s.MainComments.Select(m => m.Id).Contains(id)).FirstOrDefault();
+        }
     }
 }

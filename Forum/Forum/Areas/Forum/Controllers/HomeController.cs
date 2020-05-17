@@ -140,8 +140,7 @@ namespace Forum.Areas.Admin.Controllers
             if (!result)
                 return Json(new { success = false, message = "Access Denied. You do not have rights for deleting." });
 
-            //_uniofWork.SubComment.DeleteComment(id);
-            _db.Remove(comment);
+            await _uniofWork.SubComment.DeleteComment(id);
             await _uniofWork.SaveChangesAsync();
 
             return Json(new { success = true, message = "Delete Successful" });
@@ -158,7 +157,7 @@ namespace Forum.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                var comment = await _db.MainComments.FindAsync(vm.MainCommentId);
+                var comment = await _uniofWork.MainComment.GetByIdAsync(vm.MainCommentId);
 
                 if (comment == null)
                     return RedirectToAction("Details", new { id = vm.PostId });
@@ -178,20 +177,17 @@ namespace Forum.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> SubCommentUpdate(SubComment vm)
         {
-            var mainPostId = vm.MainCommentId;
-            var mainComm = _db.MainComments.Find(mainPostId);
-            var post = _db.Posts.Where(s => s.MainComments.Select(m => m.Id).Contains(mainComm.Id));
-            var postId = post.FirstOrDefault().Id;
+            var post = _uniofWork.Post.GetPostByMainCommentId(vm.MainCommentId);
 
             if (!ModelState.IsValid)
-                return RedirectToAction("Details", new { id = postId });
+                return RedirectToAction("Details", new { id = post.Id });
 
             if (ModelState.IsValid)
             {
-                var comment = await _db.SubComments.FindAsync(vm.Id);
+                var comment = await _uniofWork.SubComment.GetByIdAsync(vm.Id);
 
                 if (comment == null)
-                    return RedirectToAction("Details", new { id = postId });
+                    return RedirectToAction("Details", new { id = post.Id });
 
                 // access to edit have admin, moderator and post author
                 bool result = AccessRights.AuthorAdminAccessRight(HttpContext, comment.ApplicationUserId, _db);
@@ -202,7 +198,7 @@ namespace Forum.Areas.Admin.Controllers
                 await _uniofWork.SaveChangesAsync();
             }
 
-            return RedirectToAction("Details", new { id = postId });
+            return RedirectToAction("Details", new { id = post.Id });
         }
     }
 }

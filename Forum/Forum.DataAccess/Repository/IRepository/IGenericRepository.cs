@@ -25,5 +25,7 @@ namespace Forum.DataAccess.Repository.IRepository
         // clear post repo
         Post GetByIdAsyncWithComment(int id);
         void DeleteAllCommentByPostId(int id);
+
+        Post GetPostByMainCommentId(int id);
     }
 } 

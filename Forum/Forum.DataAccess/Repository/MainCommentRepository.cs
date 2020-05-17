@@ -39,8 +39,8 @@ namespace Forum.DataAccess.Repository
             //allSub.RemoveAll(s => s.MainCommentId == id);
 
             var comment = await _context.Set<T>().FindAsync(id);
-            var subComments = _context.SubComments.Where(s => comment.Id == id).ToList();
-            _context.SubComments.RemoveRange(subComments);
+            var subComments = _context.SubComments.Where(sc => sc.MainCommentId == comment.Id).ToList();
+            _context.RemoveRange(subComments);
             _context.Remove(comment);
         }
 
