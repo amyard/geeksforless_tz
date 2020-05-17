@@ -1,7 +1,59 @@
-﻿/************************************************/
+﻿.general-info-post {
+    grid-template-columns: 100px auto 245px!important;
+}
+
+
+.detail-post-actions {
+    border: none!important;
+    padding: 0!important;
+}
+
+
+@media screen and (max-width: 580px) {
+    .detail-post-actions {
+        display: none!important;
+    }
+    .general-info-post {
+        grid-template-columns: 100px auto 50px !important;
+    }
+
+    .general-info-post > .main-comment-item__action {
+        display: grid;
+    }
+
+    .main-comment-form__img {
+        display:none;
+    }
+
+    .sub-comment-item {
+        margin-left: 36px!important;
+    }
+}
+
+
+
+
+/************************************************/
+/*****             GENERAL  FORM            *****/
+/************************************************/
+.form-group-add__icon {
+    display: none;
+}
+
+@media screen and (max-width: 720px) {
+    .form-group-add__icon {
+        display: block;
+    }
+
+    .form-group-add__span {
+        display:none;
+    }
+}
+
+
+/************************************************/
 /*****          Main Comment Form           *****/
 /************************************************/
-
 .form-group {
     margin-bottom: 0;
 }
