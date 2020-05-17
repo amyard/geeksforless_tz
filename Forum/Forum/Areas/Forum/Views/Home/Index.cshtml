@@ -1,15 +1,44 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using Forum.DataAccess.Helpers
 @model Pagination<Forum.Models.Post>
+@using Forum.DataAccess.Data
+@inject ApplicationDbContext db
+
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
+
+@section ExtraCss{
+    <link href="~/css/post_details.css" rel="stylesheet" />
+}
+
+
 @foreach (var item in Model.Data)
 {
-    <div>
-        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">@item.Title</a>
+    <div class="comments">
+        <div class="general-info general-info-post">
+            <div class="main-comment-item__author">
+                <img src="/@db.ApplicationUsers.Find(item.ApplicationUserId).ImageUrl" alt="Author" />
+            </div>
+            <div class="main-comment-item__info">
+                <h5><b>@db.ApplicationUsers.Find(item.ApplicationUserId).FullName</b></h5>
+                <p>Answered @item.Created</p>
+            </div>
+        </div>
+        <div class="main-comment-item__message mb-0">
+            <h3 class="text-center mb-3 mt-2">
+                <a asp-action="Details" asp-route-id="@item.Id">
+                    @item.Title
+                </a>
+            </h3>
+            <hr />
+            <span class="short-desc">
+                @Html.Raw(item.Body)
+            </span>
+            <a class="btn btn-success mt-3" asp-action="Details" asp-route-id="@item.Id">Read More</a>
+        </div>
     </div>
     <hr />
 }
