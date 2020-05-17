@@ -10,6 +10,13 @@ namespace Forum.DataAccess
         public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
         {
             var query = inputQuery;
+
+            // order by
+            if(spec.OrderByDesc != null)
+            {
+                query = query.OrderByDescending(spec.OrderByDesc);
+            }
+
             if (spec.Criteria != null)
             {
                 query = query.Where(spec.Criteria);
@@ -25,7 +32,7 @@ namespace Forum.DataAccess
 
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
-            return query.OrderByDescending(q => q.Id);
+            return query;
         }
     }
 }

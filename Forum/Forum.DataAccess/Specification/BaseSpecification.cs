@@ -32,6 +32,12 @@ namespace Forum.DataAccess.Specification
         public int Skip { get; private set; }
         public bool IsPagingEnabled { get; private set; }
 
+        public Expression<Func<T, object>> OrderByDesc { get; private set; }
+        protected void AddOrderByDesc(Expression<Func<T, object>> orderByDescExpression)
+        {
+            OrderByDesc = orderByDescExpression;
+        }
+
         protected void ApplyPaging(int skip, int take)
         {
             Skip = skip;

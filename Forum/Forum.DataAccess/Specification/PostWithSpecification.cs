@@ -11,6 +11,7 @@ namespace Forum.DataAccess.Specification
                 (!postParams.CategoryId.HasValue || x.CategoryId == postParams.CategoryId)
             )
         {
+            AddOrderByDesc(x => x.Id);
             AddInclude(x => x.ApplicationUser);
             AddInclude(x => x.Category);
             ApplyPaging(postParams.PageSize * (postParams.PageIndex - 1), postParams.PageSize);
