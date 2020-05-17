@@ -151,7 +151,8 @@ namespace Forum.Areas.Admin.Controllers
                     _uniofWork.Post.UpdateAsync(postVM.Post);
                 }
                 await _uniofWork.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var ids = _db.Posts.Where(p => p.Title == postVM.Post.Title).ToList().Last().Id;
+                return RedirectToAction("Details", new { id = ids });
             }
             return View(postVM.Post);
         }
