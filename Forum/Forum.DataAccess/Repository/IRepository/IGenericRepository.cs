@@ -1,6 +1,7 @@
 ﻿using Forum.DataAccess.Specification;
 using Forum.Models;
 using Forum.Models.Comments;
+using Forum.Models.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Forum.DataAccess.Repository.IRepository
         Task<IReadOnlyList<T>> GetListAsync();
 
         Task CreateAsync(T entity);
-        void UpdateAsync(T entity);
+        void UpdateAsync(Post post);
         Task DeleteJsAsync(int id);
 
 

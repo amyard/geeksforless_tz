@@ -111,15 +111,7 @@ namespace Forum.Areas.Forum.Controllers
                 }
                 else
                 {
-                    var objFromDb = await _uniofWork.Post.GetByIdAsync(postVM.Post.Id);
-                    if (objFromDb != null)
-                    {
-                        objFromDb.Title = postVM.Post.Title;
-                        objFromDb.Body = postVM.Post.Body;
-                        objFromDb.CategoryId = postVM.Post.CategoryId;
-                        objFromDb.ImageUrl = postVM.Post.ImageUrl;
-                        objFromDb.Modified = DateTime.Now;
-                    }
+                    _uniofWork.Post.UpdateAsync(postVM.Post);
                 }
                 await _uniofWork.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

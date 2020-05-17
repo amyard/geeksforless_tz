@@ -2,9 +2,8 @@
 using Forum.DataAccess.Repository.IRepository;
 using Forum.DataAccess.Specification;
 using Forum.Models;
-using Forum.Models.Comments;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,9 +41,17 @@ namespace Forum.DataAccess.Repository
             await _context.AddAsync(entity);
         }
 
-        public void UpdateAsync(T entity)
+        public void UpdateAsync(Post post)
         {
-            _context.Update(entity);
+            var objFromDb = _context.Posts.Find(post.Id);
+            if (objFromDb != null)
+            {
+                objFromDb.Title = post.Title;
+                objFromDb.Body = post.Body;
+                objFromDb.CategoryId = post.CategoryId;
+                objFromDb.ImageUrl = post.ImageUrl;
+                objFromDb.Modified = DateTime.Now;
+            }
         }
 
         public async Task<T> GetByIdAsyncWithSpec(ISpecification<T> spec)
