@@ -20,8 +20,6 @@ namespace Forum.DataAccess.Repository
         {
             string webRootPath = _hostEnvironment.WebRootPath;
             var imagePath = Path.Combine(webRootPath, filePath.TrimStart('\\'));
-            bool asd = !imagePath.Contains("img_seed");
-            bool dsa = System.IO.File.Exists(imagePath) && !imagePath.Contains("img_seed");
             if (System.IO.File.Exists(imagePath) && !imagePath.Contains("img_seed"))
             {
                 System.IO.File.Delete(imagePath);

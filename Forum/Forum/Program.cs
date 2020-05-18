@@ -29,6 +29,7 @@ namespace Forum
                 var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+                var webHost = services.GetRequiredService<IWebHostEnvironment>();
                 try
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
@@ -39,9 +40,6 @@ namespace Forum
                     // generate data must be here
                     await GenerateCategories(context);
                     await GenerateRolesAsync(roleManager);
-                    //await GenerateAdmin(userManager);
-                    //await GenerateModerator(userManager);
-                    //await GenerateUsers(userManager);
                     await GenerateNewUsers(userManager, context);
                     await context.SaveChangesAsync();
 
@@ -56,6 +54,16 @@ namespace Forum
                     await GenerateSubComment(context);
                     await context.SaveChangesAsync();
 
+                    // generate folders
+                    string webRootPath = webHost.WebRootPath;
+                    var postsPath = Path.Combine(webRootPath, SD.Post_Image_Base_Path.TrimStart('\\'));
+                    if (!Directory.Exists(postsPath))
+                        Directory.CreateDirectory(postsPath);
+
+                    var usersPath = Path.Combine(webRootPath, SD.Users_Image_Base_Path.TrimStart('\\'));
+                    if (!Directory.Exists(usersPath))
+                        Directory.CreateDirectory(usersPath);
+
                 }
                 catch (Exception ex)
                 {
@@ -66,6 +74,7 @@ namespace Forum
 
             host.Run();
         }
+
 
         private async static Task GenerateSubComment(ApplicationDbContext context)
         {
@@ -213,85 +222,6 @@ namespace Forum
                     await userManager.AddToRoleAsync(usr, SD.Role_User);
                 }
             }  
-        }
-
-
-        private static async Task GenerateUsers(UserManager<IdentityUser> userManager)
-        {
-            var users = new List<ApplicationUser>
-            {
-                new ApplicationUser{UserName = "user01@gmail.com", Email = "user01@gmail.com",
-                                    FirstName = "Aval", LastName = "Symo", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/user1.png"},
-                new ApplicationUser{UserName = "user02@gmail.com", Email = "user02@gmail.com",
-                                    FirstName = "Nitro", LastName = "Agin", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/user2.jpg"},
-                new ApplicationUser{UserName = "user03@gmail.com", Email = "user03@gmail.com",
-                                    FirstName = "Trio", LastName = "Lamo", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/user3.jpg"},
-                new ApplicationUser{UserName = "user04@gmail.com", Email = "user04@gmail.com",
-                                    FirstName = "Anim", LastName = "Tiitri", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/user4.png"},
-                new ApplicationUser{UserName = "user05@gmail.com", Email = "user05@gmail.com",
-                                    FirstName = "Lilo", LastName = "Stitch", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/user5.jpeg"},
-                new ApplicationUser{UserName = "user06@gmail.com", Email = "user06@gmail.com",
-                                    FirstName = "Alice", LastName = "Wonderland", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/user1.png"},
-                new ApplicationUser{UserName = "user07@gmail.com", Email = "user07@gmail.com",
-                                    FirstName = "TC", LastName = "Junior", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/user2.jpg"},
-                new ApplicationUser{UserName = "user08@gmail.com", Email = "user08@gmail.com",
-                                    FirstName = "Argo", LastName = "Symo", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/user3.jpg"},
-                new ApplicationUser{UserName = "user09@gmail.com", Email = "user09@gmail.com",
-                                    FirstName = "Arkham", LastName = "Boggie", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/user4.png"},
-                new ApplicationUser{UserName = "user10@gmail.com", Email = "user10@gmail.com",
-                                    FirstName = "Lifro", LastName = "Alivo", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/user5.jpeg"},
-            };
-
-            foreach (ApplicationUser user in users)
-            {
-                await userManager.CreateAsync(user, "Admin123*");
-                await userManager.AddToRoleAsync(user, SD.Role_User);
-            }
-        }
-
-        private static async Task GenerateModerator(UserManager<IdentityUser> userManager)
-        {
-            var users = new List<ApplicationUser>
-            {
-                new ApplicationUser{UserName = "moderator1@gmail.com", Email = "moderator1@gmail.com",
-                                    FirstName = "Avalin", LastName = "ASymo", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/moder1.jpg"},
-                new ApplicationUser{UserName = "moderator2@gmail.com", Email = "moderator2@gmail.com",
-                                    FirstName = "Aval", LastName = "Symo", EmailConfirmed = true,
-                                    ImageUrl = "img_seed/users/moder1.jpg"},
-            };
-
-            foreach(ApplicationUser user in users)
-            {
-                await userManager.CreateAsync(user, "Admin123*");
-                await userManager.AddToRoleAsync(user, SD.Role_Moderator);
-            }
-        }
-
-        private static async Task GenerateAdmin(UserManager<IdentityUser> userManager)
-        {
-            var user = new ApplicationUser
-            {
-                UserName = "delme@gmail.com",
-                Email = "delme@gmail.com",
-                FirstName = "delme",
-                LastName = "Awesome",
-                ImageUrl = "img_seed/users/admin.png",
-                EmailConfirmed = true
-            };
-
-            await userManager.CreateAsync(user, "Admin123*");
-            await userManager.AddToRoleAsync(user, SD.Role_Admin);
         }
 
         public static async Task GenerateRolesAsync(RoleManager<IdentityRole> roleManager)

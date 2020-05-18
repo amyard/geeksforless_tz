@@ -44,8 +44,7 @@
 
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\post\" />
-    <Folder Include="wwwroot\images\users\" />
+    <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\img_seed\users\" />
   </ItemGroup>
 
@@ -53,5 +52,8 @@
   <ItemGroup>
     <None Include="wwwroot\js\filter.js" />
   </ItemGroup>
+
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

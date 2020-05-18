@@ -9,6 +9,7 @@
         public const string Users_Image_Base_Path = @"images/users";
         public const string Users_Image_Result_Path = @"images/users/";
 
+        public const string Post_Test = @"images\post\";
 
         // Users Role
         public const string Role_Admin = "Admin";
