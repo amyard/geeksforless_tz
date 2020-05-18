@@ -39,9 +39,10 @@ namespace Forum
                     // generate data must be here
                     await GenerateCategories(context);
                     await GenerateRolesAsync(roleManager);
-                    await GenerateAdmin(userManager);
-                    await GenerateModerator(userManager);
-                    await GenerateUsers(userManager);
+                    //await GenerateAdmin(userManager);
+                    //await GenerateModerator(userManager);
+                    //await GenerateUsers(userManager);
+                    await GenerateNewUsers(userManager, context);
                     await context.SaveChangesAsync();
 
                     // save data
@@ -134,6 +135,86 @@ namespace Forum
                 }
             }
         }
+
+
+        private static async Task GenerateNewUsers(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        {
+            if(!context.ApplicationUsers.Any())
+            {
+                // Generate Admin Role
+                var user = new ApplicationUser
+                {
+                    UserName = "delme@gmail.com",
+                    Email = "delme@gmail.com",
+                    FirstName = "delme",
+                    LastName = "Awesome",
+                    ImageUrl = "img_seed/users/admin.png",
+                    EmailConfirmed = true
+                };
+
+                await userManager.CreateAsync(user, "Admin123*");
+                await userManager.AddToRoleAsync(user, SD.Role_Admin);
+
+                // Generate Moderator
+                var moderators = new List<ApplicationUser>
+                {
+                    new ApplicationUser{UserName = "moderator1@gmail.com", Email = "moderator1@gmail.com",
+                                        FirstName = "Avalin", LastName = "ASymo", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/moder1.jpg"},
+                    new ApplicationUser{UserName = "moderator2@gmail.com", Email = "moderator2@gmail.com",
+                                        FirstName = "Aval", LastName = "Symo", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/moder1.jpg"},
+                };
+
+                foreach (ApplicationUser moder in moderators)
+                {
+                    await userManager.CreateAsync(moder, "Admin123*");
+                    await userManager.AddToRoleAsync(moder, SD.Role_Moderator);
+                }
+
+                // Generate users
+                var users = new List<ApplicationUser>
+                {
+                    new ApplicationUser{UserName = "user01@gmail.com", Email = "user01@gmail.com",
+                                        FirstName = "Aval", LastName = "Symo", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/user1.png"},
+                    new ApplicationUser{UserName = "user02@gmail.com", Email = "user02@gmail.com",
+                                        FirstName = "Nitro", LastName = "Agin", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/user2.jpg"},
+                    new ApplicationUser{UserName = "user03@gmail.com", Email = "user03@gmail.com",
+                                        FirstName = "Trio", LastName = "Lamo", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/user3.jpg"},
+                    new ApplicationUser{UserName = "user04@gmail.com", Email = "user04@gmail.com",
+                                        FirstName = "Anim", LastName = "Tiitri", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/user4.png"},
+                    new ApplicationUser{UserName = "user05@gmail.com", Email = "user05@gmail.com",
+                                        FirstName = "Lilo", LastName = "Stitch", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/user5.jpeg"},
+                    new ApplicationUser{UserName = "user06@gmail.com", Email = "user06@gmail.com",
+                                        FirstName = "Alice", LastName = "Wonderland", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/user1.png"},
+                    new ApplicationUser{UserName = "user07@gmail.com", Email = "user07@gmail.com",
+                                        FirstName = "TC", LastName = "Junior", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/user2.jpg"},
+                    new ApplicationUser{UserName = "user08@gmail.com", Email = "user08@gmail.com",
+                                        FirstName = "Argo", LastName = "Symo", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/user3.jpg"},
+                    new ApplicationUser{UserName = "user09@gmail.com", Email = "user09@gmail.com",
+                                        FirstName = "Arkham", LastName = "Boggie", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/user4.png"},
+                    new ApplicationUser{UserName = "user10@gmail.com", Email = "user10@gmail.com",
+                                        FirstName = "Lifro", LastName = "Alivo", EmailConfirmed = true,
+                                        ImageUrl = "img_seed/users/user5.jpeg"},
+                };
+
+                foreach (ApplicationUser usr in users)
+                {
+                    await userManager.CreateAsync(usr, "Admin123*");
+                    await userManager.AddToRoleAsync(usr, SD.Role_User);
+                }
+            }  
+        }
+
 
         private static async Task GenerateUsers(UserManager<IdentityUser> userManager)
         {
