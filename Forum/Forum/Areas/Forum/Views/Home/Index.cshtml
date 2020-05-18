@@ -14,68 +14,74 @@
     <link href="~/css/post_details.css" rel="stylesheet" />
 }
 
-
-@foreach (var item in Model.Data)
+@if (Model.Data.Any())
 {
-    <div class="comments">
-        <div class="general-info general-info-post">
-            <div class="main-comment-item__author">
-                <img src="/@db.ApplicationUsers.Find(item.ApplicationUserId).ImageUrl" alt="Author" />
+    @foreach (var item in Model.Data)
+    {
+        <div class="comments">
+            <div class="general-info general-info-post">
+                <div class="main-comment-item__author">
+                    <img src="/@db.ApplicationUsers.Find(item.ApplicationUserId).ImageUrl" alt="Author" />
+                </div>
+                <div class="main-comment-item__info">
+                    <h5><b>@db.ApplicationUsers.Find(item.ApplicationUserId).FullName</b></h5>
+                    <p>Answered @item.Created</p>
+                </div>
             </div>
-            <div class="main-comment-item__info">
-                <h5><b>@db.ApplicationUsers.Find(item.ApplicationUserId).FullName</b></h5>
-                <p>Answered @item.Created</p>
+            <div class="main-comment-item__message mb-0">
+                <h3 class="text-center mb-3 mt-2">
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        @item.Title
+                    </a>
+                </h3>
+                <hr />
+                <span class="short-desc">
+                    @Html.Raw(item.Body)
+                </span>
+                <a class="btn btn-success mt-3" asp-action="Details" asp-route-id="@item.Id">Read More</a>
             </div>
         </div>
-        <div class="main-comment-item__message mb-0">
-            <h3 class="text-center mb-3 mt-2">
-                <a asp-action="Details" asp-route-id="@item.Id">
-                    @item.Title
-                </a>
-            </h3>
-            <hr />
-            <span class="short-desc">
-                @Html.Raw(item.Body)
-            </span>
-            <a class="btn btn-success mt-3" asp-action="Details" asp-route-id="@item.Id">Read More</a>
-        </div>
-    </div>
-    <hr />
+        <hr />
+    }
+
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if (Model.PageIndex - 1 > 0)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Home" asp-action="Index"
+                       asp-route-pageIndex="@(Model.PageIndex - 1)" onclick="generateNewUrl(event, 'page', @(Model.PageIndex - 1));">
+                        Previous
+                    </a>
+                </li>
+            }
+
+            @foreach (var p in Model.Pages)
+            {
+                <li class="page-item">
+                    <a class="page-link @(p == Model.PageIndex ? "btn-primary" : "")"
+                       asp-controller="Home" asp-action="Index" asp-route-pageIndex="@p"
+                       onclick="generateNewUrl(event, 'page', @p);">
+                        @p
+                    </a>
+                </li>
+            }
+
+            @if (Model.PageIndex < Model.LastPage)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-controller="Home" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex + 1)"
+                       onclick="generateNewUrl(event, 'page', @(Model.PageIndex + 1))">
+                        Next
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
 }
-
-
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        @if (Model.PageIndex - 1 > 0)
-        {
-            <li class="page-item">
-                <a class="page-link" asp-controller="Home" asp-action="Index"
-                   asp-route-pageIndex="@(Model.PageIndex-1)" onclick="generateNewUrl(event, 'page', @(Model.PageIndex-1));">
-                    Previous
-                </a>
-            </li>
-        }
-
-        @foreach (var p in Model.Pages)
-        {
-            <li class="page-item">
-                <a class="page-link @(p == Model.PageIndex ? "btn-primary" : "")"
-                   asp-controller="Home" asp-action="Index" asp-route-pageIndex="@p"
-                   onclick="generateNewUrl(event, 'page', @p);">
-                    @p
-                </a>
-            </li>
-        }
-
-        @if (Model.PageIndex < Model.LastPage)
-        {
-            <li class="page-item">
-                <a class="page-link"
-                   asp-controller="Home" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex+1)"
-                   onclick="generateNewUrl(event, 'page', @(Model.PageIndex+1))">
-                    Next
-                </a>
-            </li>
-        }
-    </ul>
-</nav>
+else
+{
+    <h3>Search result - 0. Change the search criteria.</h3>
+}

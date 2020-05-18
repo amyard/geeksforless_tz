@@ -61,6 +61,9 @@ namespace Forum.DataAccess.Repository
 
         public async Task<IReadOnlyList<T>> GetListAsyncWithSpec(ISpecification<T> spec)
         {
+            // если результат поиска - ноль записей
+            if (spec.Skip < 0)
+                return null;
             return await ApplySpecification(spec).ToListAsync();
         }
 

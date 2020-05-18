@@ -62,14 +62,18 @@ namespace Forum.Areas.Admin.Controllers
             }
 
             var obj = await _uniofWork.Post.GetListAsyncWithSpec(spec);
-            foreach (var item in obj)
-            {
-                item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
-            }
-            var data = obj;
             
-
-            return View(new Pagination<Post>(postParams.PageIndex, postParams.PageSize, totalItems, pagesLast, pages, data));
+            // если результат поиска - ноль записей
+            if(obj != null)
+            { 
+                foreach (var item in obj)
+                {
+                    item.ApplicationUser = _db.ApplicationUsers.Find(item.ApplicationUserId);
+                }
+                var data = obj;
+                return View(new Pagination<Post>(postParams.PageIndex, postParams.PageSize, totalItems, pagesLast, pages, data));
+            }
+            return View(new Pagination<Post>(postParams.PageIndex, postParams.PageSize, totalItems, pagesLast, pages, new List<Post>()));
         }
 
         // GET: Forum/Home/Details/5
